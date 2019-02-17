@@ -1,0 +1,83 @@
+---
+layout: default
+title: "Stardust Example: Scatterplot"
+---
+<h1>Stardust Example: Scatterplot</h1>
+<iframe class="example-container" src="content.html" width="960px" height="500px" scrolling="no" sandbox="allow-popups allow-scripts allow-forms allow-same-origin"></iframe>
+<p>A scatterplot created with the <a href="https://stardustjs.github.io/">Stardust</a> library. Data is generated using a formula.</p>
+
+<h2>index.html</h2>
+<pre><code class="highlight html">&lt;!DOCTYPE html&gt;
+&lt;meta charset&#x3D;&quot;utf-8&quot;&gt;
+&lt;title&gt;Stardust Example: Scatterplot&lt;&#x2F;title&gt;
+&lt;link rel&#x3D;&quot;stylesheet&quot; href&#x3D;&quot;..&#x2F;common&#x2F;style.css&quot; type&#x3D;&quot;text&#x2F;css&quot; &#x2F;&gt;
+&lt;canvas id&#x3D;&quot;main-canvas&quot;&gt;&lt;&#x2F;canvas&gt;
+&lt;div class&#x3D;&quot;initializing&quot;&gt;&lt;p&gt;Initializing...&lt;&#x2F;p&gt;&lt;&#x2F;div&gt;
+&lt;script src&#x3D;&quot;&#x2F;&#x2F;d3js.org&#x2F;d3.v3.min.js&quot; type&#x3D;&quot;text&#x2F;javascript&quot;&gt;&lt;&#x2F;script&gt;
+&lt;script src&#x3D;&quot;..&#x2F;common&#x2F;stardust&#x2F;stardust.bundle.js&quot; type&#x3D;&quot;text&#x2F;javascript&quot;&gt;&lt;&#x2F;script&gt;
+&lt;script src&#x3D;&quot;..&#x2F;common&#x2F;utils.js&quot; type&#x3D;&quot;text&#x2F;javascript&quot;&gt;&lt;&#x2F;script&gt;
+&lt;script type&#x3D;&quot;text&#x2F;javascript&quot;&gt;
+    var canvas &#x3D; document.getElementById(&quot;main-canvas&quot;);
+    var width &#x3D; 960;
+    var height &#x3D; 500;
+    var platform &#x3D; Stardust.platform(&quot;webgl-2d&quot;, canvas, width, height);
+
+    var Nx &#x3D; 96 * 1;
+    var Ny &#x3D; 50 * 1;
+
+    var data &#x3D; [];
+    for(var i &#x3D; 0; i &lt; Nx; i++) {
+        for(var j &#x3D; 0; j &lt; Ny; j++) {
+            var x &#x3D; i &#x2F; (Nx - 1) * 2 - 1;
+            var y &#x3D; j &#x2F; (Ny - 1) * 2 - 1;
+            var scale &#x3D; 2;
+            var len &#x3D; Math.sqrt(x * x + y * y);
+            var d &#x3D; len * Math.exp(-len * len * 5);
+            var dx &#x3D; y &#x2F; len * d;
+            var dy &#x3D; -x &#x2F; len * d;
+            data.push({
+                x: x + dx * scale,
+                y: y + dy * scale
+            });
+        }
+    }
+
+    let circle &#x3D; new Stardust.mark.circle(16);
+
+    var circles &#x3D; Stardust.mark.create(circle, platform);
+    var circles2 &#x3D; Stardust.mark.create(circle, platform);
+
+    var scaleX &#x3D; Stardust.scale.linear()
+        .domain([ -1, 1 ])
+        .range([ 10, width - 10 ]);
+    var scaleY &#x3D; Stardust.scale.linear()
+        .domain([ -1, 1 ])
+        .range([ 10, height - 10 ]);
+    circles.attr(&quot;center&quot;, Stardust.scale.Vector2(scaleX(d &#x3D;&gt; d.x), scaleY(d &#x3D;&gt; d.y)));
+    circles.attr(&quot;radius&quot;, 2);
+    circles.attr(&quot;color&quot;, [ 0, 0, 0, 0.4 ]);
+    circles2.attr(&quot;center&quot;, Stardust.scale.Vector2(scaleX(d &#x3D;&gt; d.x), scaleY(d &#x3D;&gt; d.y)));
+    circles2.attr(&quot;radius&quot;, 4);
+    circles2.attr(&quot;color&quot;, [ 255, 0, 0, 1 ]);
+    circles.data(data);
+
+    circles.render();
+
+    platform.beginPicking(canvas.width, canvas.height);
+    circles.render();
+    platform.endPicking();
+
+    canvas.onmousemove &#x3D; e &#x3D;&gt; {
+        let bounds &#x3D; canvas.getBoundingClientRect();
+        var x &#x3D; e.clientX - bounds.left;
+        var y &#x3D; e.clientY - bounds.top;
+        var p &#x3D; platform.getPickingPixel(x * 2, y * 2);
+        if(p) {
+            platform.clear();
+            circles.render();
+            circles2.attr(&quot;color&quot;, [ 1, 0, 0, 1 ]);
+            circles2.data([ data[p[1]] ]);
+            circles2.render();
+        }
+    }
+&lt;&#x2F;script&gt;</code></pre>

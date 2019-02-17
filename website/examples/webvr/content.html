@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+
+<style>
+html, body {
+  width: 100%;
+  height: 100%;
+  background-color: #000;
+  color: #ccc;
+  margin: 0px;
+  padding: 0;
+  overflow: hidden;
+  font-family: Helvetica, Arial, sans-serif;
+  font-size: 16px;
+}
+span.error {
+  padding: 10px;
+  display: block;
+}
+span.overlay {
+  position: absolute;
+  display: block;
+  left: 0; top: 0; right: 0; bottom: 0;
+  padding: 10px;
+  pointer-events: none;
+}
+canvas {
+  position: absolute;
+  top: 0;
+}
+</style>
+</html>
+<body>
+
+<canvas id="main-canvas"></canvas>
+<span class="overlay" id="overlay-element">Click the screen to start WebVR</span>
+
+<script type="text/javascript">
+WebVRConfig = {
+  BUFFER_SCALE: 1.0,
+};
+</script>
+<script type="text/javascript" src="webvr-polyfill.min.js"></script>
+<script src="//d3js.org/d3.v3.min.js" type="text/javascript"></script>
+<script type="text/javascript" src="../common/stardust/stardust.bundle.js"></script>
+<script type="text/javascript" src="userCode.js"></script>
+<script type="text/javascript">
+    let canvas = document.getElementById("main-canvas");
+    canvas.getContext("webgl", { alpha: false });
+    let width = window.innerWidth;
+    let height = window.innerHeight;
+    let platform = Stardust.platform("webgl-webvr", canvas, width, height);
+    platform.pixelRatio = 1;
+
+    UserCode(platform, (userContext) => {
+        navigator.getVRDisplays().then((displays) => {
+            let vrDisplay = displays[0];
+            if(!vrDisplay) {
+                document.body.innerHTML = '<span class="error">Could not find WebVR display</span>';
+                return;
+            }
+
+            function onResize() {
+                if(vrDisplay && vrDisplay.isPresenting) {
+                    // If we're presenting we want to use the drawing buffer size
+                    // recommended by the VRDevice, since that will ensure the best
+                    // results post-distortion.
+                    var leftEye = vrDisplay.getEyeParameters("left");
+                    var rightEye = vrDisplay.getEyeParameters("right");
+                    // For simplicity we're going to render both eyes at the same size,
+                    // even if one eye needs less resolution. You can render each eye at
+                    // the exact size it needs, but you'll need to adjust the viewports to
+                    // account for that.
+                    platform.resize(Math.max(leftEye.renderWidth, rightEye.renderWidth) * 2, Math.max(leftEye.renderHeight, rightEye.renderHeight));
+                } else {
+                    platform.resize(window.innerWidth, window.innerHeight);
+                }
+            }
+            function onVRDisplayPresentChange() {
+                onResize();
+            }
+
+            window.addEventListener("resize", onResize, false);
+            window.addEventListener('vrdisplaypresentchange', onVRDisplayPresentChange);
+
+            let frameData = new VRFrameData();
+
+            function onAnimationFrame() {
+                if (vrDisplay.isPresenting) {
+                    platform.clear([ 0, 0, 0, 1 ]);
+
+                    vrDisplay.getFrameData(frameData);
+
+                    // When presenting render a stereo view.
+                    platform._GL.viewport(0, 0, canvas.width * 0.5, canvas.height);
+                    platform.setWebVRView(frameData.leftViewMatrix, frameData.leftProjectionMatrix);
+                    userContext.render();
+
+                    platform._GL.viewport(canvas.width * 0.5, 0, canvas.width * 0.5, canvas.height);
+                    platform.setWebVRView(frameData.rightViewMatrix, frameData.rightProjectionMatrix);
+                    userContext.render();
+                    // If we're currently presenting to the VRDisplay we need to
+                    // explicitly indicate we're done rendering.
+                    vrDisplay.submitFrame();
+                }
+                vrDisplay.requestAnimationFrame(onAnimationFrame);
+            }
+            vrDisplay.requestAnimationFrame(onAnimationFrame);
+
+            canvas.onclick = () => {
+                document.getElementById("overlay-element").remove();
+                canvas.onclick = null;
+                vrDisplay.requestPresent([{ source: canvas }]).catch((err) => {
+                    document.body.innerHTML = '<span class="error">' + err + '</span>';
+                });
+            };
+        });
+    });
+</script>
+</body>

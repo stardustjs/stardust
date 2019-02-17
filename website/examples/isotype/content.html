@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<link rel="stylesheet" href="../common/style.css" type="text/css" />
+<canvas id="main-canvas" /></canvas>
+<div data-switch="mode">
+    <button class="active" data-value="mode1">Multi-column</button><button data-value="mode2">Single-column</button>
+    <div class="fps"></div>
+</div>
+<div class="initializing"><p>Initializing...</p></div>
+<script src="//d3js.org/d3.v3.min.js" type="text/javascript"></script>
+<script src="../common/stardust/stardust.bundle.js" type="text/javascript"></script>
+<script src="../common/utils.js" type="text/javascript"></script>
+<script type="text/javascript">
+    let canvas = document.getElementById("main-canvas");
+    let width = 960;
+    let height = 470;
+    let platform = Stardust.platform("webgl-2d", canvas, width, height);
+
+    // SVG file created from Adobe Illustrator:
+    let svgFile = `
+        <svg version="1.1" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="10px" height="20px">
+            <polygon points="
+                7.5234375,11.2519531 7.5234375,4.3295898 5.9628906,4.3295898 5.9628906,2.3691406 5.3920898,1.7827148
+                4.6079102,1.7827148 4.0356445,2.3691406 4.0356445,4.3295898 2.4765625,4.3295898 2.4765625,11.2519531 3.3203125,11.7666016
+                3.3779297,17.2871094 2.4765625,17.9169922 7.5234375,17.9179688 6.6230469,17.2871094 6.6796875,11.7675781
+            "/>
+        </svg>
+    `;
+
+    var data = [];
+    [ 27, 53, 91, 52, 112, 42, 107, 91, 68, 56, 115, 86, 26, 102, 28, 23, 119, 110 ].forEach((x, index) => {
+        for(let i = 0; i < x; i++) {
+            data.push({
+                type: index % 3,
+                column: Math.floor(index / 3)
+            });
+        }
+    });
+    var typeCounter = [ 0, 0, 0 ];
+    var typeColumnCounter = [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ];
+    data.forEach((d) => {
+        d.typeIndex = typeCounter[d.type]++;
+        d.typeColumnIndex = typeColumnCounter[3 * d.column + d.type]++;
+    });
+
+    // Convert the SVG file to Stardust mark spec.
+    let isotype = new Stardust.mark.isotype(svgFile);
+
+    // Create the mark object.
+    let isotypes = Stardust.mark.create(isotype, platform);
+
+    let isotypeHeight = 18;
+
+    let colors = [[31,119,180],[255,127,14],[44,160,44]];
+    colors = colors.map((x) => [ x[0] / 255, x[1] / 255, x[2] / 255, 1 ]);
+
+    let pScale = Stardust.scale.custom(`
+        Vector2(
+            20 + column * 160 + type * 45 + typeColumnIndex % 5 * 8,
+            460 - floor(typeColumnIndex / 5) * 18
+        )
+    `)
+    pScale.attr("typeColumnIndex", d => d.typeColumnIndex);
+    pScale.attr("column", d => d.column);
+    pScale.attr("typeIndex", d => d.typeIndex);
+    pScale.attr("type", d => d.type);
+
+    let qScale = Stardust.scale.custom(`
+        Vector2(
+            65 + type * 300 + typeIndex % 30 * 8,
+            460 - floor(typeIndex / 30) * 18
+        )
+    `)
+    qScale.attr("typeIndex", d => d.typeIndex);
+    qScale.attr("type", d => d.type);
+
+    let interpolateScale = Stardust.scale.interpolate("Vector2")
+    interpolateScale.t(0);
+
+    isotypes.attr("position", interpolateScale(pScale(), qScale()));
+    isotypes.attr("color", d => colors[d.type]);
+    isotypes.attr("size", 1.0);
+    isotypes.data(data);
+
+    function render() {
+        platform.clear();
+        isotypes.render();
+    }
+
+    console.log(data.length);
+
+    render();
+
+    switches.mode_changed = function(newValue) {
+        beginTransition((t) => {
+            if(newValue == "mode1")
+                interpolateScale.t(1 - t);
+            if(newValue == "mode2")
+                interpolateScale.t(t);
+            render();
+        });
+    };
+</script>

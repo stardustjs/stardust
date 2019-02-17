@@ -1,0 +1,84 @@
+---
+layout: default
+title: "Stardust Example: Parametric Functions"
+---
+<h1>Stardust Example: Parametric Functions</h1>
+<iframe class="example-container" src="content.html" width="960px" height="500px" scrolling="no" sandbox="allow-popups allow-scripts allow-forms allow-same-origin"></iframe>
+<p>Rendering two interesting <a href="https://en.wikipedia.org/wiki/Parametric_equation">parametric functions</a>. Left: a <a href="https://en.wikipedia.org/wiki/Hypotrochoid">Hypotrochoid</a>; right: a more complex function.
+Both functions are rendered using 100k circles.</p>
+
+<h2>index.html</h2>
+<pre><code class="highlight html">&lt;!DOCTYPE html&gt;
+&lt;meta charset&#x3D;&quot;utf-8&quot;&gt;
+&lt;link rel&#x3D;&quot;stylesheet&quot; href&#x3D;&quot;..&#x2F;common&#x2F;style.css&quot; type&#x3D;&quot;text&#x2F;css&quot; &#x2F;&gt;
+&lt;style type&#x3D;&quot;text&#x2F;css&quot;&gt;
+    #main-canvas { margin: 0; padding: 0; position: absolute; left: 0; top: 0 }
+&lt;&#x2F;style&gt;
+&lt;canvas id&#x3D;&quot;main-canvas&quot;&gt;&lt;&#x2F;canvas&gt;
+&lt;div class&#x3D;&quot;fps&quot;&gt;&lt;&#x2F;div&gt;
+&lt;div class&#x3D;&quot;initializing&quot;&gt;&lt;p&gt;Initializing...&lt;&#x2F;p&gt;&lt;&#x2F;div&gt;
+&lt;script src&#x3D;&quot;&#x2F;&#x2F;d3js.org&#x2F;d3.v3.min.js&quot; type&#x3D;&quot;text&#x2F;javascript&quot;&gt;&lt;&#x2F;script&gt;
+&lt;script src&#x3D;&quot;..&#x2F;common&#x2F;stardust&#x2F;stardust.bundle.js&quot; type&#x3D;&quot;text&#x2F;javascript&quot;&gt;&lt;&#x2F;script&gt;
+&lt;script src&#x3D;&quot;..&#x2F;common&#x2F;utils.js&quot; type&#x3D;&quot;text&#x2F;javascript&quot;&gt;&lt;&#x2F;script&gt;
+&lt;script type&#x3D;&quot;text&#x2F;javascript&quot;&gt;
+    var canvas &#x3D; document.getElementById(&quot;main-canvas&quot;);
+    var width &#x3D; 960;
+    var height &#x3D; 500;
+    var margin &#x3D; 10;
+    var marginLeft &#x3D; 35;
+    var marginBottom &#x3D; 20;
+    var platform &#x3D; Stardust.platform(&quot;webgl-2d&quot;, canvas, width, height);
+
+    var circleMark &#x3D; Stardust.mark.circle(8);
+
+    var data &#x3D; [];
+    var N &#x3D; 100000;
+    for(var i &#x3D; 0; i &lt; N; i++) {
+        data.push(i &#x2F; N * Math.PI * 2);
+    }
+
+    &#x2F;&#x2F; Color based on phase
+    var scaleColor &#x3D; Stardust.scale.custom(&#x60;hcl2rgb(Color(value + shift, 0.5, 0.5, 0.1))&#x60;);
+    scaleColor.attr(&quot;shift&quot;, 0);
+
+    var left &#x3D; Stardust.mark.create(circleMark, platform);
+    var scaleLeft &#x3D; Stardust.scale.custom(&#x60;
+        Vector2(
+            (R - r) * cos(value) + d * cos((R &#x2F; r - 1) * value),
+            (R - r) * sin(value) - d * sin((R &#x2F; r - 1) * value)
+        ) * size + center
+    &#x60;).attr(&quot;d&quot;, 2.19).attr(&quot;R&quot;, 5).attr(&quot;r&quot;, 5 * (18 &#x2F; 41)).attr(&quot;size&quot;, 45).attr(&quot;center&quot;, &quot;Vector2&quot;, [ -13.33 + 250, 250 ]);
+    left.attr(&quot;center&quot;, scaleLeft(d &#x3D;&gt; d * 41));
+    left.attr(&quot;radius&quot;, 1);
+    left.attr(&quot;color&quot;, scaleColor(d &#x3D;&gt; d * 41));
+    left.data(data);
+
+
+
+    var right &#x3D; Stardust.mark.create(circleMark, platform);
+    var scaleRight &#x3D; Stardust.scale.custom(&#x60;
+        Vector2(
+            cos(a * value) - cos(b * value) * cos(b * value) * cos(b * value),
+            sin(c * value) - sin(d * value) * sin(d * value) * sin(d * value)
+        ) * size + center
+    &#x60;).attr(&quot;a&quot;, 80).attr(&quot;b&quot;, 1).attr(&quot;c&quot;, 1).attr(&quot;d&quot;, 80).attr(&quot;size&quot;, 110).attr(&quot;center&quot;, &quot;Vector2&quot;, [ -13.33 * 2 + 1000 - 250, 250 ]);
+    right.attr(&quot;center&quot;, scaleRight(d &#x3D;&gt; d));
+    right.attr(&quot;radius&quot;, 1);
+    right.attr(&quot;color&quot;, scaleColor(d &#x3D;&gt; d));
+    right.data(data);
+
+    function render() {
+        left.render();
+        right.render();
+    }
+
+    var t0 &#x3D; new Date().getTime();
+    var fps &#x3D; new FPS();
+    d3.timer(function() {
+        var t &#x3D; new Date().getTime() - t0;
+        scaleLeft.attr(&quot;d&quot;, 1.95 + Math.sin(t &#x2F; 500) * 0.4);
+        scaleColor.attr(&quot;shift&quot;, t &#x2F; 250 % (Math.PI * 2));
+        render();
+        fps.update();
+    });
+&lt;&#x2F;script&gt;</code></pre>

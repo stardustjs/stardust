@@ -1,0 +1,2 @@
+Rendering two interesting [parametric functions](https://en.wikipedia.org/wiki/Parametric_equation). Left: a [Hypotrochoid](https://en.wikipedia.org/wiki/Hypotrochoid); right: a more complex function.
+Both functions are rendered using 100k circles.

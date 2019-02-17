@@ -1,0 +1,123 @@
+body {
+  -webkit-user-select: none;
+  font-family: Helvetica, Arial, sans-serif;
+  font-size: 14px;
+  overflow: hidden;
+}
+.toolbar {
+  box-sizing: border-box;
+  background: #EEE;
+  position: fixed;
+  overflow: hidden;
+  z-index: 1000;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: 30px;
+  line-height: 30px;
+  border-bottom: 1px solid #CCC;
+}
+.toolbar .title {
+  box-sizing: border-box;
+  font-weight: bold;
+  margin-left: 10px;
+  margin-right: 10px;
+}
+.editor-panel {
+  position: fixed;
+  left: 0;
+  top: 30px;
+  bottom: 0;
+  border-right: 2px solid #CCC;
+  overflow: hidden;
+}
+.editor-panel .row {
+  height: 30px;
+  line-height: 30px;
+  margin-left: 10px;
+}
+.editor-panel .editors {
+  box-sizing: border-box;
+  position: absolute;
+  top: 60px;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+.editor-panel .editors .editor {
+  box-sizing: border-box;
+  position: absolute;
+  width: 100%;
+  border-top: 1px solid #CCC;
+  border-bottom: 1px solid #CCC;
+}
+.monaco-editor {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  top: 0;
+}
+.v-divider {
+  background-color: #EEE;
+  cursor: ew-resize;
+  width: 5px;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+}
+.h-divider {
+  background-color: #EEE;
+  cursor: ns-resize;
+  height: 5px;
+  position: absolute;
+  left: 0;
+  right: 0;
+}
+.s3rendering-container {
+  position: fixed;
+  top: 30px;
+  right: 0;
+  bottom: 0;
+}
+.s3rendering-view {
+  position: relative;
+}
+.s3rendering-view canvas,
+.s3rendering-view svg {
+  position: absolute;
+  left: 0;
+  top: 0;
+}
+.s3rendering-view svg {
+  pointer-events: none;
+}
+.s3rendering-view .overlay {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  right: 0;
+}
+.s3rendering-view .overlay .controls .row {
+  height: 30px;
+  line-height: 30px;
+  background-color: rgba(240, 240, 240, 0.8);
+  margin-bottom: 2px;
+  width: 100%;
+}
+.s3rendering-view .overlay .controls .row label {
+  display: inline-block;
+  width: 100px;
+  text-align: right;
+  margin-right: 5px;
+}
+.s3rendering-view .overlay .controls .row input {
+  display: inline-block;
+  vertical-align: middle;
+  width: 400px;
+}
+.s3rendering-view .overlay .messages pre {
+  font-size: 11px;
+  font-family: "monospace";
+  margin: 5px;
+}

@@ -1,0 +1,33 @@
+{
+  "name": "stardust-bundle",
+  "description": "Stardust: Create GPU-based Visualizations",
+  "author": {
+    "name": "Donghao Ren",
+    "email": "donghao.ren@gmail.com",
+    "url": "https://donghaoren.org"
+  },
+  "version": "0.2.0",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:stardust-vis/stardust-core.git"
+  },
+  "main": "dist/stardust.js",
+  "typings": "dist/stardust.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build:ts": "tsc -p .",
+    "build:dts": "node build-dts-bundle.js",
+    "build:pack": "webpack --mode=production",
+    "build": "yarn run build:ts && yarn run build:pack && yarn run build:dts",
+    "watch": "webpack -w --mode=development",
+    "prepublishOnly": "yarn run build"
+  },
+  "devDependencies": {
+    "stardust-core": "*",
+    "stardust-isotype": "*",
+    "stardust-webgl": "*"
+  },
+  "license": "BSD-3-Clause"
+}

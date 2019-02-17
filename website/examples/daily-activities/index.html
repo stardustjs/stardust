@@ -1,0 +1,120 @@
+---
+layout: default
+title: "Stardust Example: Daily Activities of Creative People"
+---
+<h1>Stardust Example: Daily Activities of Creative People</h1>
+<iframe class="example-container" src="content.html" width="960px" height="500px" scrolling="no" sandbox="allow-popups allow-scripts allow-forms allow-same-origin"></iframe>
+
+<h2>index.html</h2>
+<pre><code class="highlight html">&lt;!DOCTYPE html&gt;
+&lt;meta charset&#x3D;&quot;utf-8&quot;&gt;
+&lt;link rel&#x3D;&quot;stylesheet&quot; href&#x3D;&quot;..&#x2F;common&#x2F;style.css&quot; type&#x3D;&quot;text&#x2F;css&quot; &#x2F;&gt;
+&lt;canvas id&#x3D;&quot;main-canvas&quot;&gt;&lt;&#x2F;canvas&gt;
+&lt;div data-switch&#x3D;&quot;mode&quot;&gt;
+    &lt;button class&#x3D;&quot;active&quot; data-value&#x3D;&quot;mode1&quot;&gt;Circular&lt;&#x2F;button&gt;&lt;button data-value&#x3D;&quot;mode2&quot;&gt;Linear&lt;&#x2F;button&gt;
+    &lt;div class&#x3D;&quot;fps&quot;&gt;&lt;&#x2F;div&gt;
+&lt;&#x2F;div&gt;
+&lt;div class&#x3D;&quot;initializing&quot;&gt;&lt;p&gt;Initializing...&lt;&#x2F;p&gt;&lt;&#x2F;div&gt;
+&lt;script src&#x3D;&quot;&#x2F;&#x2F;d3js.org&#x2F;d3.v3.min.js&quot; type&#x3D;&quot;text&#x2F;javascript&quot;&gt;&lt;&#x2F;script&gt;
+&lt;script src&#x3D;&quot;..&#x2F;common&#x2F;stardust&#x2F;stardust.bundle.js&quot; type&#x3D;&quot;text&#x2F;javascript&quot;&gt;&lt;&#x2F;script&gt;
+&lt;script src&#x3D;&quot;..&#x2F;common&#x2F;utils.js&quot; type&#x3D;&quot;text&#x2F;javascript&quot;&gt;&lt;&#x2F;script&gt;
+&lt;script type&#x3D;&quot;text&#x2F;javascript&quot;&gt;
+    &#x2F;&#x2F; Create Stardust platform from canvas element
+    var canvas &#x3D; document.getElementById(&quot;main-canvas&quot;);
+    var width &#x3D; 960;
+    var height &#x3D; 470;
+    var platform &#x3D; Stardust.platform(&quot;webgl-2d&quot;, canvas, width, height);
+
+    &#x2F;&#x2F; Create bar marks using wedge
+    var barMark &#x3D; Stardust.mark.compile(&#x60;
+        import { Wedge } from P2D;
+
+        mark Bar(
+            index: float,
+            center: Vector2,
+            vcenter: Vector2,
+            radius: float,
+            t1: float,
+            t2: float,
+            t: float,
+            width: float,
+            width2: float,
+            color: Color &#x3D; [ 0, 0, 0, 1 ]
+        ) {
+            let thetaA &#x3D; (t1 - 6) &#x2F; 12.0 * PI;
+            let thetaB &#x3D; (t2 - 6) &#x2F; 12.0 * PI;
+            let cP1 &#x3D; center + Vector2(cos(thetaA), sin(thetaA)) * radius;
+            let k &#x3D; 1.5;
+            if(t1 + t2 &lt; 12) k &#x3D; -0.5;
+            let ss &#x3D; 2;
+            let ti &#x3D; t * (1 + ss) - ss + (1 - index) * ss;
+            if(ti &lt; 0) ti &#x3D; 0;
+            if(ti &gt; 1) ti &#x3D; 1;
+            Wedge(
+                mix(cP1, vcenter + Vector2(t1 * 38, 0), ti),
+                mix(thetaA, PI * k, ti),
+                mix(thetaB, PI * k, ti),
+                mix(radius * (thetaB - thetaA), (t2 - t1) * 38, ti),
+                mix(width2, width, ti),
+                color
+            );
+        }
+    &#x60;);
+
+    &#x2F;&#x2F; Create bars with our barMark
+    var bars &#x3D; Stardust.mark.create(barMark.Bar, platform);
+
+    &#x2F;&#x2F; Use D3&#39;s scale for colors
+    var colorScale &#x3D; d3.scale.category10();
+
+    loadData(&quot;data.json&quot;, (data) &#x3D;&gt; {
+        &#x2F;&#x2F; Layout parameters
+        let yScale &#x3D; d3.scale.linear().domain([ 0, data.length - 1 ]).range([ 15, height - 15 ]);
+        let h &#x3D; (yScale(1) - yScale(0)) * 0.8;
+        let sz &#x3D; Math.sqrt((width - 15) * (height - 15) &#x2F; data.length &#x2F; 5);
+        let grouping &#x3D; Math.floor(width &#x2F; sz &#x2F; 2);
+
+        &#x2F;&#x2F; Attributes
+        bars.attr(&quot;t&quot;, 0);
+        bars.attr(&quot;t1&quot;, d &#x3D;&gt; d.start);
+        bars.attr(&quot;t2&quot;, d &#x3D;&gt; d.start + d.duration);
+        bars.attr(&quot;color&quot;, d &#x3D;&gt; Stardust.Color.FromHTML(colorScale(d.type)));
+        bars.attr(&quot;width&quot;, h);
+        bars.attr(&quot;width2&quot;, sz * 0.3);
+
+        &#x2F;&#x2F; Instancing
+        bars.instance(
+            d &#x3D;&gt; d.activities,
+            (d, i) &#x3D;&gt; {
+                return {
+                    index: i &#x2F; (data.length - 1),
+                    center: [ i % grouping * sz * 2 + sz + 4, Math.floor(i &#x2F; grouping) * sz * 2 + sz + 10 ],
+                    radius: sz - sz * 0.3 &#x2F; 2 - 2,
+                    vcenter: [ 20, yScale(i) ]
+                };
+            }
+        );
+
+        &#x2F;&#x2F; Set data items to bars
+        bars.data(data);
+
+        &#x2F;&#x2F; Render&#x2F;Re-render bars
+        function render() {
+            platform.clear();
+            bars.render();
+        }
+
+        render();
+
+        &#x2F;&#x2F; Handle switches and animation timing
+        switches.mode_changed &#x3D; function(newValue) {
+            beginTransition((t) &#x3D;&gt; {
+                if(newValue &#x3D;&#x3D; &quot;mode1&quot;)
+                    bars.attr(&quot;t&quot;, 1 - t);
+                if(newValue &#x3D;&#x3D; &quot;mode2&quot;)
+                    bars.attr(&quot;t&quot;, t);
+                render();
+            });
+        };
+    });
+&lt;&#x2F;script&gt;</code></pre>

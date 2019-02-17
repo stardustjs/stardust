@@ -1,0 +1,216 @@
+---
+layout: default
+title: "Stardust Example: SandDance"
+---
+<h1>Stardust Example: SandDance</h1>
+<iframe class="example-container" src="content.html" width="960px" height="500px" scrolling="no" sandbox="allow-popups allow-scripts allow-forms allow-same-origin"></iframe>
+<p>Producing a <a href="https://www.sanddance.ms/">SandDance</a> visualization with Stardust. Instance-based visualization with animation between 3 layouts: scatterplot of longitude and latitude, group by state, and group by longitude and latitude in 3D.</p>
+<p>Data: DemoVote from <a href="http://www.census.gov">census.gov</a> and <a href="http://www.theguardian.com/news/datablog/2012/nov/07/us-2012-election-county-results-download">Guardian</a></p>
+
+<h2>index.html</h2>
+<pre><code class="highlight html">&lt;!DOCTYPE html&gt;
+&lt;meta charset&#x3D;&quot;utf-8&quot;&gt;
+&lt;title&gt;Stardust Example: Sanddance&lt;&#x2F;title&gt;
+&lt;link rel&#x3D;&quot;stylesheet&quot; href&#x3D;&quot;..&#x2F;common&#x2F;style.css&quot; type&#x3D;&quot;text&#x2F;css&quot; &#x2F;&gt;
+&lt;canvas id&#x3D;&quot;main-canvas&quot;&gt;&lt;&#x2F;canvas&gt;
+&lt;div data-switch&#x3D;&quot;mode&quot;&gt;
+    &lt;button class&#x3D;&quot;active&quot; data-value&#x3D;&quot;mode1&quot;&gt;Map&lt;&#x2F;button&gt;&lt;button data-value&#x3D;&quot;mode3&quot;&gt;Map Bins&lt;&#x2F;button&gt;&lt;button data-value&#x3D;&quot;mode2&quot;&gt;State&lt;&#x2F;button&gt;
+    &lt;div class&#x3D;&quot;fps&quot;&gt;&lt;&#x2F;div&gt;
+&lt;&#x2F;div&gt;
+&lt;div class&#x3D;&quot;initializing&quot;&gt;&lt;p&gt;Initializing...&lt;&#x2F;p&gt;&lt;&#x2F;div&gt;
+&lt;script src&#x3D;&quot;&#x2F;&#x2F;d3js.org&#x2F;d3.v3.min.js&quot; type&#x3D;&quot;text&#x2F;javascript&quot;&gt;&lt;&#x2F;script&gt;
+&lt;script src&#x3D;&quot;..&#x2F;common&#x2F;stardust&#x2F;stardust.bundle.js&quot; type&#x3D;&quot;text&#x2F;javascript&quot;&gt;&lt;&#x2F;script&gt;
+&lt;script src&#x3D;&quot;..&#x2F;common&#x2F;utils.js&quot; type&#x3D;&quot;text&#x2F;javascript&quot;&gt;&lt;&#x2F;script&gt;
+&lt;script type&#x3D;&quot;text&#x2F;javascript&quot;&gt;
+    let width &#x3D; 960;
+    let height &#x3D; 470;
+    let canvas &#x3D; document.getElementById(&quot;main-canvas&quot;);
+    let platform &#x3D; Stardust.platform(&quot;webgl-2d&quot;, canvas, width, height);
+    platform.set3DView(Math.PI &#x2F; 2, width &#x2F; height);
+    platform.setPose(new Stardust.Pose(
+        new Stardust.Vector3(0, 0, 200),
+        new Stardust.Quaternion(0, 0, 0, 1)
+    ));
+    platform.clear([ 1, 1, 1, 1 ]);
+    platform.setCameraPosition(Stardust.Vector3(0, 0, 200));
+    loadData(&quot;demovoteclean.tsv&quot;, (data) &#x3D;&gt; {
+        let demovote &#x3D; data;
+        let mark &#x3D; Stardust.mark.compile(&#x60;
+            import { Cube } from P3D;
+
+            let longitude: float;
+            let latitude: float;
+            let state: float;
+            let stateBinIndex: float;
+            let xBin: float;
+            let yBin: float;
+            let xyBinIndex: float;
+            let index: float;
+
+            function getPositionScatterplot(): Vector3 {
+                let scaleX &#x3D; 0.2;
+                let scaleY &#x3D; 0.3;
+                return Vector3(
+                    scaleX * (longitude - (-95.9386152570054)),
+                    scaleY * (latitude - (37.139536624928695)),
+                    0
+                );
+            }
+
+            function getPositionStateBins(): Vector3 {
+                return Vector3(
+                    (state - 48 &#x2F; 2) * 0.3 + (stateBinIndex % 10 - 4.5) * 0.02,
+                    floor(stateBinIndex &#x2F; 10) * 0.02 - 2.0, 0
+                );
+            }
+
+            function getPositionXYBinning(): Vector3 {
+                let n &#x3D; 6;
+                let txy &#x3D; xyBinIndex % (n * n);
+                let tx &#x3D; txy % n;
+                let ty &#x3D; floor(txy &#x2F; n);
+                let tz &#x3D; floor(xyBinIndex &#x2F; (n * n));
+                return Vector3(
+                    (xBin - 9 &#x2F; 2) * 0.6 + (tx - n &#x2F; 2 + 0.5) * 0.04,
+                    tz * 0.04 - 2.0,
+                    (yBin - 6 &#x2F; 2) * 0.6 + (ty - n &#x2F; 2 + 0.5) * 0.04
+                );
+            }
+
+            function clamp01(t: float): float {
+                if(t &lt; 0) t &#x3D; 0;
+                if(t &gt; 1) t &#x3D; 1;
+                return t;
+            }
+
+            mark Mark(color: Color, t1: float, t2: float, t3: float, ki1: float, ki2: float, ki3: float) {
+                let p1 &#x3D; getPositionScatterplot();
+                let p2 &#x3D; getPositionStateBins();
+                let p3 &#x3D; getPositionXYBinning();
+                let p &#x3D; p1 * clamp01(t1 + ki1 * index) +
+                    p2 * clamp01(t2 + ki2 * index) +
+                    p3 * clamp01(t3 + ki3 * index);
+                Cube(
+                    p * 50,
+                    0.7,
+                    color
+                );
+            }
+        &#x60;)[&quot;Mark&quot;];
+        let marks &#x3D; Stardust.mark.create(mark, Stardust.shader.lighting(), platform);
+
+        demovote.forEach(d &#x3D;&gt; {
+            d.Longitude &#x3D; +d.Longitude;
+            d.Latitude &#x3D; +d.Latitude;
+        });
+
+        let longitudeExtent &#x3D; d3.extent(demovote, d &#x3D;&gt; d.Longitude);
+        let latitudeExtent &#x3D; d3.extent(demovote, d &#x3D;&gt; d.Latitude);
+
+        let longitudeScale &#x3D; d3.scale.linear().domain(longitudeExtent).range([ 0, 1 ])
+        let latitudeScale &#x3D; d3.scale.linear().domain(latitudeExtent).range([ 0, 1 ])
+
+        &#x2F;&#x2F; Map states to integer.
+        let states &#x3D; new Set();
+        let state2number &#x3D; {};
+        let state2count &#x3D; {};
+        demovote.forEach(d &#x3D;&gt; states.add(d.StateAbb));
+        states &#x3D; Array.from(states);
+        states.sort();
+        states.forEach((d, i) &#x3D;&gt; {
+            state2number[d] &#x3D; i;
+            state2count[d] &#x3D; 0;
+        });
+
+        let xyBinCounter &#x3D; {};
+
+        let xBinCount &#x3D; 10;
+        let yBinCount &#x3D; 7;
+
+        demovote.sort((a, b) &#x3D;&gt; a.Obama - b.Obama);
+
+        demovote.forEach((d, i) &#x3D;&gt; {
+            d.index &#x3D; i;
+            if(state2count[d.StateAbb] &#x3D;&#x3D; null) state2count[d.StateAbb] &#x3D; 0;
+            d.stateBinIndex &#x3D; state2count[d.StateAbb]++;
+
+            let xBin &#x3D; Math.floor(longitudeScale(d.Longitude) * xBinCount);
+            let yBin &#x3D; Math.floor(latitudeScale(d.Latitude) * yBinCount);
+            let bin &#x3D; yBin * (xBinCount + 1) + xBin;
+            d.xBin &#x3D; xBin;
+            d.yBin &#x3D; yBin;
+            if(xyBinCounter[bin] &#x3D;&#x3D; null) xyBinCounter[bin] &#x3D; 0;
+            d.xyBinIndex &#x3D; xyBinCounter[bin]++;
+        });
+
+
+        let s1 &#x3D; d3.interpolateLab(&quot;#f7f7f7&quot;, &quot;#0571b0&quot;);
+        let s2 &#x3D; d3.interpolateLab(&quot;#f7f7f7&quot;, &quot;#ca0020&quot;);
+
+        let strToRGBA &#x3D; (str) &#x3D;&gt; {
+            let rgb &#x3D; d3.rgb(str);
+            return [ rgb.r &#x2F; 255, rgb.g &#x2F; 255, rgb.b &#x2F; 255, 1 ];
+        }
+
+        let scaleColor &#x3D; (value) &#x3D;&gt; {
+            if(value &gt; 0.5) {
+                return strToRGBA(s1((value - 0.5) * 2));
+            } else {
+                return strToRGBA(s2((0.5 - value) * 2));
+            }
+        }
+
+        marks
+            .attr(&quot;index&quot;, d &#x3D;&gt; d.index &#x2F; (demovote.length - 1))
+            .attr(&quot;longitude&quot;, d &#x3D;&gt; d.Longitude)
+            .attr(&quot;latitude&quot;, d &#x3D;&gt; d.Latitude)
+            .attr(&quot;state&quot;, (d) &#x3D;&gt; state2number[d.StateAbb])
+            .attr(&quot;stateBinIndex&quot;, (d) &#x3D;&gt; d.stateBinIndex)
+            .attr(&quot;xBin&quot;, (d) &#x3D;&gt; d.xBin)
+            .attr(&quot;yBin&quot;, (d) &#x3D;&gt; d.yBin)
+            .attr(&quot;xyBinIndex&quot;, (d) &#x3D;&gt; d.xyBinIndex)
+            .attr(&quot;color&quot;, (d) &#x3D;&gt; scaleColor(d.Obama));
+
+        let skewing &#x3D; 1;
+
+        function transition12(t) {
+            let tt &#x3D; t * (1 + skewing) - skewing;
+            marks.attr(&quot;t1&quot;, 1 - tt).attr(&quot;t2&quot;, tt).attr(&quot;t3&quot;, 0).attr(&quot;ki1&quot;, -skewing).attr(&quot;ki2&quot;, +skewing).attr(&quot;ki3&quot;, 0);
+        }
+        function transition23(t) {
+            let tt &#x3D; t * (1 + skewing) - skewing;
+            marks.attr(&quot;t1&quot;, 0).attr(&quot;t2&quot;, 1 - tt).attr(&quot;t3&quot;, tt).attr(&quot;ki1&quot;, 0).attr(&quot;ki2&quot;, -skewing).attr(&quot;ki3&quot;, +skewing);
+        }
+        function transition31(t) {
+            let tt &#x3D; t * (1 + skewing) - skewing;
+            marks.attr(&quot;t1&quot;, tt).attr(&quot;t2&quot;, 0).attr(&quot;t3&quot;, 1 - tt).attr(&quot;ki1&quot;, +skewing).attr(&quot;ki2&quot;, 0).attr(&quot;ki3&quot;, -skewing);
+        }
+
+        marks.data(demovote);
+
+        function render() {
+            platform.clear([ 1, 1, 1, 1 ]);
+            marks.render();
+        }
+
+        transition12(0);
+        render();
+
+        var transitions &#x3D; {
+            &quot;mode1mode2&quot;: (t) &#x3D;&gt; transition12(t),
+            &quot;mode2mode1&quot;: (t) &#x3D;&gt; transition12(1 - t),
+            &quot;mode2mode3&quot;: (t) &#x3D;&gt; transition23(t),
+            &quot;mode3mode2&quot;: (t) &#x3D;&gt; transition23(1 - t),
+            &quot;mode3mode1&quot;: (t) &#x3D;&gt; transition31(t),
+            &quot;mode1mode3&quot;: (t) &#x3D;&gt; transition31(1 - t),
+        }
+
+        switches.mode_changed &#x3D; (newMode, previousMode) &#x3D;&gt; {
+            beginTransition((t) &#x3D;&gt; {
+                transitions[previousMode + newMode](t);
+                render();
+            });
+        };
+    });
+&lt;&#x2F;script&gt;
+</code></pre>

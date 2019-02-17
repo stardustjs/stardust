@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Stardust Playground</title>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta http-equiv="Content-Type" content="text/html;charset=utf-8" >
+        <link rel="stylesheet" href="playground.css" type="text/css" />
+    </head>
+    <body>
+        <div id="root"></div>
+        <script type="text/javascript" src="playground.bundle.js"></script>
+        <script src="monaco-editor/vs/loader.js"></script>
+        <script>
+            require.config({ paths: { 'vs': 'monaco-editor/vs' }});
+            window.playgroundInitialize();
+        </script>
+    </body>
+</html>

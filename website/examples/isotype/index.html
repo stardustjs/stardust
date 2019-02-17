@@ -1,0 +1,112 @@
+---
+layout: default
+title: "Stardust Example: Isotypes"
+---
+<h1>Stardust Example: Isotypes</h1>
+<iframe class="example-container" src="content.html" width="960px" height="500px" scrolling="no" sandbox="allow-popups allow-scripts allow-forms allow-same-origin"></iframe>
+<p>An isotype-based visualization created with the <a href="https://stardustjs.github.io/">Stardust</a> library. Data is generated randomly.</p>
+
+<h2>index.html</h2>
+<pre><code class="highlight html">&lt;!DOCTYPE html&gt;
+&lt;meta charset&#x3D;&quot;utf-8&quot;&gt;
+&lt;link rel&#x3D;&quot;stylesheet&quot; href&#x3D;&quot;..&#x2F;common&#x2F;style.css&quot; type&#x3D;&quot;text&#x2F;css&quot; &#x2F;&gt;
+&lt;canvas id&#x3D;&quot;main-canvas&quot; &#x2F;&gt;&lt;&#x2F;canvas&gt;
+&lt;div data-switch&#x3D;&quot;mode&quot;&gt;
+    &lt;button class&#x3D;&quot;active&quot; data-value&#x3D;&quot;mode1&quot;&gt;Multi-column&lt;&#x2F;button&gt;&lt;button data-value&#x3D;&quot;mode2&quot;&gt;Single-column&lt;&#x2F;button&gt;
+    &lt;div class&#x3D;&quot;fps&quot;&gt;&lt;&#x2F;div&gt;
+&lt;&#x2F;div&gt;
+&lt;div class&#x3D;&quot;initializing&quot;&gt;&lt;p&gt;Initializing...&lt;&#x2F;p&gt;&lt;&#x2F;div&gt;
+&lt;script src&#x3D;&quot;&#x2F;&#x2F;d3js.org&#x2F;d3.v3.min.js&quot; type&#x3D;&quot;text&#x2F;javascript&quot;&gt;&lt;&#x2F;script&gt;
+&lt;script src&#x3D;&quot;..&#x2F;common&#x2F;stardust&#x2F;stardust.bundle.js&quot; type&#x3D;&quot;text&#x2F;javascript&quot;&gt;&lt;&#x2F;script&gt;
+&lt;script src&#x3D;&quot;..&#x2F;common&#x2F;utils.js&quot; type&#x3D;&quot;text&#x2F;javascript&quot;&gt;&lt;&#x2F;script&gt;
+&lt;script type&#x3D;&quot;text&#x2F;javascript&quot;&gt;
+    let canvas &#x3D; document.getElementById(&quot;main-canvas&quot;);
+    let width &#x3D; 960;
+    let height &#x3D; 470;
+    let platform &#x3D; Stardust.platform(&quot;webgl-2d&quot;, canvas, width, height);
+
+    &#x2F;&#x2F; SVG file created from Adobe Illustrator:
+    let svgFile &#x3D; &#x60;
+        &lt;svg version&#x3D;&quot;1.1&quot; xmlns&#x3D;&quot;http:&#x2F;&#x2F;www.w3.org&#x2F;2000&#x2F;svg&quot; x&#x3D;&quot;0px&quot; y&#x3D;&quot;0px&quot; width&#x3D;&quot;10px&quot; height&#x3D;&quot;20px&quot;&gt;
+            &lt;polygon points&#x3D;&quot;
+                7.5234375,11.2519531 7.5234375,4.3295898 5.9628906,4.3295898 5.9628906,2.3691406 5.3920898,1.7827148
+                4.6079102,1.7827148 4.0356445,2.3691406 4.0356445,4.3295898 2.4765625,4.3295898 2.4765625,11.2519531 3.3203125,11.7666016
+                3.3779297,17.2871094 2.4765625,17.9169922 7.5234375,17.9179688 6.6230469,17.2871094 6.6796875,11.7675781
+            &quot;&#x2F;&gt;
+        &lt;&#x2F;svg&gt;
+    &#x60;;
+
+    var data &#x3D; [];
+    [ 27, 53, 91, 52, 112, 42, 107, 91, 68, 56, 115, 86, 26, 102, 28, 23, 119, 110 ].forEach((x, index) &#x3D;&gt; {
+        for(let i &#x3D; 0; i &lt; x; i++) {
+            data.push({
+                type: index % 3,
+                column: Math.floor(index &#x2F; 3)
+            });
+        }
+    });
+    var typeCounter &#x3D; [ 0, 0, 0 ];
+    var typeColumnCounter &#x3D; [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ];
+    data.forEach((d) &#x3D;&gt; {
+        d.typeIndex &#x3D; typeCounter[d.type]++;
+        d.typeColumnIndex &#x3D; typeColumnCounter[3 * d.column + d.type]++;
+    });
+
+    &#x2F;&#x2F; Convert the SVG file to Stardust mark spec.
+    let isotype &#x3D; new Stardust.mark.isotype(svgFile);
+
+    &#x2F;&#x2F; Create the mark object.
+    let isotypes &#x3D; Stardust.mark.create(isotype, platform);
+
+    let isotypeHeight &#x3D; 18;
+
+    let colors &#x3D; [[31,119,180],[255,127,14],[44,160,44]];
+    colors &#x3D; colors.map((x) &#x3D;&gt; [ x[0] &#x2F; 255, x[1] &#x2F; 255, x[2] &#x2F; 255, 1 ]);
+
+    let pScale &#x3D; Stardust.scale.custom(&#x60;
+        Vector2(
+            20 + column * 160 + type * 45 + typeColumnIndex % 5 * 8,
+            460 - floor(typeColumnIndex &#x2F; 5) * 18
+        )
+    &#x60;)
+    pScale.attr(&quot;typeColumnIndex&quot;, d &#x3D;&gt; d.typeColumnIndex);
+    pScale.attr(&quot;column&quot;, d &#x3D;&gt; d.column);
+    pScale.attr(&quot;typeIndex&quot;, d &#x3D;&gt; d.typeIndex);
+    pScale.attr(&quot;type&quot;, d &#x3D;&gt; d.type);
+
+    let qScale &#x3D; Stardust.scale.custom(&#x60;
+        Vector2(
+            65 + type * 300 + typeIndex % 30 * 8,
+            460 - floor(typeIndex &#x2F; 30) * 18
+        )
+    &#x60;)
+    qScale.attr(&quot;typeIndex&quot;, d &#x3D;&gt; d.typeIndex);
+    qScale.attr(&quot;type&quot;, d &#x3D;&gt; d.type);
+
+    let interpolateScale &#x3D; Stardust.scale.interpolate(&quot;Vector2&quot;)
+    interpolateScale.t(0);
+
+    isotypes.attr(&quot;position&quot;, interpolateScale(pScale(), qScale()));
+    isotypes.attr(&quot;color&quot;, d &#x3D;&gt; colors[d.type]);
+    isotypes.attr(&quot;size&quot;, 1.0);
+    isotypes.data(data);
+
+    function render() {
+        platform.clear();
+        isotypes.render();
+    }
+
+    console.log(data.length);
+
+    render();
+
+    switches.mode_changed &#x3D; function(newValue) {
+        beginTransition((t) &#x3D;&gt; {
+            if(newValue &#x3D;&#x3D; &quot;mode1&quot;)
+                interpolateScale.t(1 - t);
+            if(newValue &#x3D;&#x3D; &quot;mode2&quot;)
+                interpolateScale.t(t);
+            render();
+        });
+    };
+&lt;&#x2F;script&gt;</code></pre>

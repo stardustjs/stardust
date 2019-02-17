@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<title>Stardust Example: Scatterplot</title>
+<link rel="stylesheet" href="../common/style.css" type="text/css" />
+<canvas id="main-canvas"></canvas>
+<div class="initializing"><p>Initializing...</p></div>
+<script src="//d3js.org/d3.v3.min.js" type="text/javascript"></script>
+<script src="../common/stardust/stardust.bundle.js" type="text/javascript"></script>
+<script src="../common/utils.js" type="text/javascript"></script>
+<script type="text/javascript">
+    var canvas = document.getElementById("main-canvas");
+    var width = 960;
+    var height = 500;
+    var platform = Stardust.platform("webgl-2d", canvas, width, height);
+
+    var Nx = 96 * 1;
+    var Ny = 50 * 1;
+
+    var data = [];
+    for(var i = 0; i < Nx; i++) {
+        for(var j = 0; j < Ny; j++) {
+            var x = i / (Nx - 1) * 2 - 1;
+            var y = j / (Ny - 1) * 2 - 1;
+            var scale = 2;
+            var len = Math.sqrt(x * x + y * y);
+            var d = len * Math.exp(-len * len * 5);
+            var dx = y / len * d;
+            var dy = -x / len * d;
+            data.push({
+                x: x + dx * scale,
+                y: y + dy * scale
+            });
+        }
+    }
+
+    let circle = new Stardust.mark.circle(16);
+
+    var circles = Stardust.mark.create(circle, platform);
+    var circles2 = Stardust.mark.create(circle, platform);
+
+    var scaleX = Stardust.scale.linear()
+        .domain([ -1, 1 ])
+        .range([ 10, width - 10 ]);
+    var scaleY = Stardust.scale.linear()
+        .domain([ -1, 1 ])
+        .range([ 10, height - 10 ]);
+    circles.attr("center", Stardust.scale.Vector2(scaleX(d => d.x), scaleY(d => d.y)));
+    circles.attr("radius", 2);
+    circles.attr("color", [ 0, 0, 0, 0.4 ]);
+    circles2.attr("center", Stardust.scale.Vector2(scaleX(d => d.x), scaleY(d => d.y)));
+    circles2.attr("radius", 4);
+    circles2.attr("color", [ 255, 0, 0, 1 ]);
+    circles.data(data);
+
+    circles.render();
+
+    platform.beginPicking(canvas.width, canvas.height);
+    circles.render();
+    platform.endPicking();
+
+    canvas.onmousemove = e => {
+        let bounds = canvas.getBoundingClientRect();
+        var x = e.clientX - bounds.left;
+        var y = e.clientY - bounds.top;
+        var p = platform.getPickingPixel(x * 2, y * 2);
+        if(p) {
+            platform.clear();
+            circles.render();
+            circles2.attr("color", [ 1, 0, 0, 1 ]);
+            circles2.data([ data[p[1]] ]);
+            circles2.render();
+        }
+    }
+</script>

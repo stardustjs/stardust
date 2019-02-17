@@ -1,0 +1,28 @@
+{
+  "name": "stardust-core",
+  "description": "Stardust: Create GPU-based Visualizations",
+  "author": {
+    "name": "Donghao Ren",
+    "email": "donghao.ren@gmail.com",
+    "url": "https://donghaoren.org/"
+  },
+  "version": "0.2.2",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/stardustjs/stardust-core.git"
+  },
+  "main": "dist/stardust-core.js",
+  "typings": "dist/stardust-core.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build:ts": "tsc -p .",
+    "build:pegjs": "pegjs --allowed-start-rules FileEntry,ExpressionEntry src/compiler/parser.pegjs dist/compiler/parser_pegjs.js",
+    "build": "yarn run build:ts && yarn run build:pegjs",
+    "test": "mocha test",
+    "prepublish": "yarn run build",
+    "watch": "tsc -w -p ."
+  },
+  "license": "BSD-3-Clause"
+}

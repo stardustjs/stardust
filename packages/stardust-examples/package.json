@@ -1,0 +1,22 @@
+{
+  "name": "stardust-examples",
+  "version": "0.2.0",
+  "description": "Stardust examples",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "tsc -p server",
+    "deploy": "node server/dist/static.js",
+    "watch": "tsc -p server -w",
+    "start": "node server/dist/server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/stardustjs/stardust-examples.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/stardustjs/stardust-examples/issues"
+  },
+  "homepage": "https://github.com/stardustjs/stardust-examples#readme"
+}

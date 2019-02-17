@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<link rel="stylesheet" href="../common/style.css" type="text/css" />
+<script src="//d3js.org/d3.v3.min.js" type="text/javascript"></script>
+<script src="../common/stardust/stardust.bundle.js" type="text/javascript"></script>
+<script src="../common/utils.js" type="text/javascript"></script>
+<style>
+    .squares-container {
+        position: relative;
+    }
+    .squares-container canvas, .squares-container svg {
+        position: absolute;
+        left: 0; top: 0;
+    }
+    .squares-container svg {
+        pointer-events: none;
+    }
+    .axis path,
+    .axis line {
+        fill: none;
+        stroke: black;
+        shape-rendering: crispEdges;
+    }
+
+    .axis text {
+        font-family: sans-serif;
+        font-size: 11px;
+    }
+</style>
+<div class="squares-container">
+    <canvas id="main-canvas"></canvas>
+    <svg id="main-svg"></svg>
+</div>
+<div class="initializing"><p>Initializing...</p></div>
+<script src="squares.js" type="text/javascript"></script>
+<script type="text/javascript">
+    var container = d3.select(".squares-container");
+    var vis = new SquaresVisualization(container.node());
+    loadData("mnist.csv", (DATA) => {
+        vis.layout();
+        vis.setInstances(DATA.slice(0, 4000));
+        vis.setLayoutParameter({
+            y0: 10,
+            numberBins: 10,
+            squaresPerBin: 11,
+            squareSize: 3,
+            squareSpacing: 4,
+            xSpacing: 88
+        });
+    });
+</script>

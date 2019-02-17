@@ -1,0 +1,1606 @@
+[
+  {
+    "name": "Honoré de Balzac",
+    "type": "Writer",
+    "description": "Hailed as a founder of realism, he shook the 19th century literary scene with his unflinching take on Parisian society.",
+    "activities": [
+      {
+        "type": "sleep",
+        "duration": 1,
+        "start": 0,
+        "description": "Sleep"
+      },
+      {
+        "type": "creative",
+        "duration": 7,
+        "start": 1,
+        "description": "Wore monkish robe and Moroccan slippers for his priest-like work"
+      },
+      {
+        "type": "sleep",
+        "duration": 1.5,
+        "start": 8,
+        "description": "Nap"
+      },
+      {
+        "type": "creative",
+        "duration": 6,
+        "start": 9.5,
+        "description": "Had a cup of black coffee before starting work"
+      },
+      {
+        "type": "food",
+        "duration": 2.5,
+        "start": 15.5,
+        "description": "Received friends, took a bath, went out for dinner"
+      },
+      {
+        "type": "sleep",
+        "duration": 6,
+        "start": 18,
+        "description": "Sleep"
+      }
+    ]
+  },
+  {
+    "name": "John Milton",
+    "type": "Poet",
+    "description": "Milton’s poem ‘Paradise Lost’ is an epic in the true sense of the word – originally published as ten books and over ten thousand lines of verse. Writing in the 17th century, during a time of religious upheaval, he passionately defended the right to free speech.",
+    "activities": [
+      {
+        "type": "sleep",
+        "duration": 4,
+        "start": 0,
+        "description": "Sleep"
+      },
+      {
+        "type": "other",
+        "duration": 1,
+        "start": 4,
+        "description": "Meditation"
+      },
+      {
+        "type": "food",
+        "duration": 2,
+        "start": 5,
+        "description": "Listening to aide reading bible"
+      },
+      {
+        "type": "creative",
+        "duration": 3,
+        "start": 7,
+        "description": "Dictating to aide"
+      },
+      {
+        "type": "creative",
+        "duration": 2,
+        "start": 10,
+        "description": "Listening to aide read back"
+      },
+      {
+        "type": "food",
+        "duration": 1,
+        "start": 12,
+        "description": "Lunch"
+      },
+      {
+        "type": "exercise",
+        "duration": 3,
+        "start": 13,
+        "description": "Walk up and down his garden"
+      },
+      {
+        "type": "food",
+        "duration": 5,
+        "start": 16,
+        "description": "Having guests over, supper, smoking a pipe"
+      },
+      {
+        "type": "sleep",
+        "duration": 3,
+        "start": 21,
+        "description": "Sleep"
+      }
+    ]
+  },
+  {
+    "name": "Haruki Murakami",
+    "type": "Writer",
+    "description": "A contemporary Japanese author, Murakami penned works including ‘Norwegian Wood’ and ‘Kafka on the Shore’. His magic realist style has earned him the Franz Kafka Prize, and other awards.",
+    "activities": [
+      {
+        "type": "sleep",
+        "duration": 4,
+        "start": 0,
+        "description": "Sleep"
+      },
+      {
+        "type": "creative",
+        "duration": 8,
+        "start": 4,
+        "description": "Writing"
+      },
+      {
+        "type": "exercise",
+        "duration": 1,
+        "start": 12,
+        "description": "Walking and swimming"
+      },
+      {
+        "type": "food",
+        "duration": 8,
+        "start": 13,
+        "description": "Doing housework, admin and spending time with family"
+      },
+      {
+        "type": "sleep",
+        "duration": 3,
+        "start": 21,
+        "description": "Sleep"
+      }
+    ]
+  },
+  {
+    "name": "Voltaire",
+    "type": "Writer",
+    "description": "A French Enlightenment writer, outspoken critic of the Catholic Church and defender of free speech, Voltaire applied his witty approach to all sorts of literary forms including novels, poems and essays. ",
+    "activities": [
+      {
+        "type": "sleep",
+        "duration": 4,
+        "start": 0,
+        "description": "Sleep"
+      },
+      {
+        "type": "creative",
+        "duration": 8,
+        "start": 4,
+        "description": "Working in bed, dictating his thoughts to a secretary"
+      },
+      {
+        "type": "other",
+        "duration": 0.5,
+        "start": 12,
+        "description": "Getting dressed"
+      },
+      {
+        "type": "creative",
+        "duration": 1.5,
+        "start": 12.5,
+        "description": "Working"
+      },
+      {
+        "type": "admin",
+        "duration": 2,
+        "start": 14,
+        "description": "Surveying the estate with secretary"
+      },
+      {
+        "type": "creative",
+        "duration": 4,
+        "start": 16,
+        "description": "Working"
+      },
+      {
+        "type": "food",
+        "duration": 1.5,
+        "start": 20,
+        "description": "Dinner with family"
+      },
+      {
+        "type": "creative",
+        "duration": 2.5,
+        "start": 21.5,
+        "description": "Working"
+      }
+    ]
+  },
+  {
+    "name": "Benjamin Franklin",
+    "type": "Politician",
+    "description": "One of the founding fathers of the United States, Franklin earned the title of the ‘first American’. Through his writing and campaigning for colonial unity, he was a defining voice in the shaping of American society.",
+    "activities": [
+      {
+        "type": "sleep",
+        "duration": 5,
+        "start": 0,
+        "description": "Sleep"
+      },
+      {
+        "type": "food",
+        "duration": 3,
+        "start": 5,
+        "description": "Wash, make a resolution, have breakfast"
+      },
+      {
+        "type": "creative",
+        "duration": 4,
+        "start": 8,
+        "description": "Work"
+      },
+      {
+        "type": "food",
+        "duration": 2,
+        "start": 12,
+        "description": "Reading, life admin, lunch"
+      },
+      {
+        "type": "creative",
+        "duration": 4,
+        "start": 14,
+        "description": "Work"
+      },
+      {
+        "type": "food",
+        "duration": 4,
+        "start": 18,
+        "description": "Supper, music, putting things in order, socialising"
+      },
+      {
+        "type": "sleep",
+        "duration": 2,
+        "start": 22,
+        "description": "Sleep"
+      }
+    ]
+  },
+  {
+    "name": "Immanuel Kant",
+    "type": "Philosopher",
+    "description": "A German philosopher who continues to have a profound influence on contemporary thought. Among his achievements, he established a firm basis for factual knowledge, paving the way for the scientific method.",
+    "activities": [
+      {
+        "type": "sleep",
+        "duration": 5,
+        "start": 0,
+        "description": "Sleep"
+      },
+      {
+        "type": "food",
+        "duration": 1,
+        "start": 5,
+        "description": "Tea and pipe"
+      },
+      {
+        "type": "creative",
+        "duration": 1,
+        "start": 6,
+        "description": "Writing"
+      },
+      {
+        "type": "admin",
+        "duration": 4,
+        "start": 7,
+        "description": "Lecturing at the university"
+      },
+      {
+        "type": "food",
+        "duration": 4,
+        "start": 11,
+        "description": "Meat and wine at the pub for lunch, main meal of the day"
+      },
+      {
+        "type": "exercise",
+        "duration": 1,
+        "start": 15,
+        "description": "Walk"
+      },
+      {
+        "type": "creative",
+        "duration": 3,
+        "start": 16,
+        "description": "Working with Joseph Green"
+      },
+      {
+        "type": "food",
+        "duration": 3,
+        "start": 19,
+        "description": "Reading"
+      },
+      {
+        "type": "sleep",
+        "duration": 2,
+        "start": 22,
+        "description": "Sleep"
+      }
+    ]
+  },
+  {
+    "name": "Kurt Vonnegut",
+    "type": "Writer",
+    "description": "Described as a counterculture’s novelist, Vonnegut wrote in a satirical style that embodied the more cynical views of American society. His works like ‘Cat’s Cradle’ are praised for their blending of science fiction with gallows humor.",
+    "activities": [
+      {
+        "type": "sleep",
+        "duration": 5.5,
+        "start": 0,
+        "description": "Sleep"
+      },
+      {
+        "type": "creative",
+        "duration": 2.5,
+        "start": 5.5,
+        "description": "Writing"
+      },
+      {
+        "type": "food",
+        "duration": 0.5,
+        "start": 8,
+        "description": "Breakfast"
+      },
+      {
+        "type": "creative",
+        "duration": 1.5,
+        "start": 8.5,
+        "description": "Writing"
+      },
+      {
+        "type": "exercise",
+        "duration": 1.5,
+        "start": 10,
+        "description": "Walk, swim"
+      },
+      {
+        "type": "food",
+        "duration": 1,
+        "start": 11.5,
+        "description": "Lunch"
+      },
+      {
+        "type": "admin",
+        "duration": 5,
+        "start": 12.5,
+        "description": "Teaching at school"
+      },
+      {
+        "type": "food",
+        "duration": 4.5,
+        "start": 17.5,
+        "description": "Drinking scotch, making supper, listenting to jazz"
+      },
+      {
+        "type": "sleep",
+        "duration": 2,
+        "start": 22,
+        "description": "Sleep"
+      }
+    ]
+  },
+  {
+    "name": "Maya Angelou",
+    "type": "Writer",
+    "description": "Poet and author, Angelou represented a strong voice of the Civil Rights movement. Her novel ‘I Know Why the Caged Bird Sings’ brought her international acclaim for its frank exploration of race and identity. ",
+    "activities": [
+      {
+        "type": "sleep",
+        "duration": 5.5,
+        "start": 0,
+        "description": "Sleep"
+      },
+      {
+        "type": "other",
+        "duration": 0.5,
+        "start": 5.5,
+        "description": "Getting dressed"
+      },
+      {
+        "type": "food",
+        "duration": 0.5,
+        "start": 6,
+        "description": "Coffee with husband"
+      },
+      {
+        "type": "other",
+        "duration": 0.5,
+        "start": 6.5,
+        "description": "Commute to hotel room she rented for work"
+      },
+      {
+        "type": "creative",
+        "duration": 8,
+        "start": 7,
+        "description": "Writing in hotel room, the more anonymous the better"
+      },
+      {
+        "type": "food",
+        "duration": 4.5,
+        "start": 15,
+        "description": "Shower, cook, have dinner with husband"
+      },
+      {
+        "type": "creative",
+        "duration": 0.5,
+        "start": 19.5,
+        "description": "Reading work to husband"
+      },
+      {
+        "type": "food",
+        "duration": 2,
+        "start": 20,
+        "description": "Time with husband"
+      },
+      {
+        "type": "sleep",
+        "duration": 2,
+        "start": 22,
+        "description": "Sleep"
+      }
+    ]
+  },
+  {
+    "name": "Wystan Hugh Auden",
+    "type": "Poet",
+    "description": "Auden was an English-born poet who wrote about religion, politics and love. His 400-odd poems ranged enormously in style, from ballads and haikus to obscure modern forms.",
+    "activities": [
+      {
+        "type": "sleep",
+        "duration": 5.5,
+        "start": 0,
+        "description": "Sleep"
+      },
+      {
+        "type": "food",
+        "duration": 0.5,
+        "start": 5.5,
+        "description": "Coffee with a crossword"
+      },
+      {
+        "type": "creative",
+        "duration": 5,
+        "start": 6,
+        "description": "Worked with a dose of Benzedrine, a daily routine he kept up for 20 years"
+      },
+      {
+        "type": "food",
+        "duration": 0.5,
+        "start": 11,
+        "description": "Lunch"
+      },
+      {
+        "type": "creative",
+        "duration": 6.5,
+        "start": 11.5,
+        "description": "Main work"
+      },
+      {
+        "type": "food",
+        "duration": 1.5,
+        "start": 18,
+        "description": "Strong vodka martinis"
+      },
+      {
+        "type": "food",
+        "duration": 2.5,
+        "start": 19.5,
+        "description": "Dinner with friends"
+      },
+      {
+        "type": "sleep",
+        "duration": 2,
+        "start": 22,
+        "description": "Used sedative to go to sleep"
+      }
+    ]
+  },
+  {
+    "name": "Ludwig Van Beethoven ",
+    "type": "Composer",
+    "description": "A revolutionary in the music world, Beethoven broke with convention to compose highly original works, continuing to write even after losing his hearing.",
+    "activities": [
+      {
+        "type": "sleep",
+        "duration": 6,
+        "start": 0,
+        "description": "Sleep"
+      },
+      {
+        "type": "food",
+        "duration": 0.5,
+        "start": 6,
+        "description": "Just a coffee, 60 beans per cup "
+      },
+      {
+        "type": "creative",
+        "duration": 8,
+        "start": 6.5,
+        "description": "Worked on compositions at his desk, taking the occasional break to walk outdoors, which aided his creativity"
+      },
+      {
+        "type": "food",
+        "duration": 1,
+        "start": 14.5,
+        "description": "Dinner with wine"
+      },
+      {
+        "type": "exercise",
+        "duration": 1,
+        "start": 15.5,
+        "description": "Long walk"
+      },
+      {
+        "type": "food",
+        "duration": 4,
+        "start": 16.5,
+        "description": "Tavern to eat and to read a newspaper"
+      },
+      {
+        "type": "food",
+        "duration": 1,
+        "start": 20.5,
+        "description": "Supper"
+      },
+      {
+        "type": "sleep",
+        "duration": 2.5,
+        "start": 21.5,
+        "description": "Sleep"
+      }
+    ]
+  },
+  {
+    "name": "Mary Flannery O'Connor",
+    "type": "Writer",
+    "description": "Known as one of America’s most important fiction writers, O’Connor developed a Southern Gothic style. Her works include ‘The Violent Bear it Away’ which explores themes of violence and spiritual awakening.",
+    "activities": [
+      {
+        "type": "sleep",
+        "duration": 6,
+        "start": 0,
+        "description": "Sleep"
+      },
+      {
+        "type": "food",
+        "duration": 1,
+        "start": 6,
+        "description": "Praying, having coffee"
+      },
+      {
+        "type": "food",
+        "duration": 2,
+        "start": 7,
+        "description": "Church"
+      },
+      {
+        "type": "creative",
+        "duration": 3,
+        "start": 9,
+        "description": "Work"
+      },
+      {
+        "type": "food",
+        "duration": 9,
+        "start": 12,
+        "description": "Hobbies, guests, painting, taking care of birds"
+      },
+      {
+        "type": "sleep",
+        "duration": 3,
+        "start": 21,
+        "description": "Sleep"
+      }
+    ]
+  },
+  {
+    "name": "Le Corbusier",
+    "type": "Architect",
+    "description": "A Swiss-French architect who enraged the establishment with his bold modern designs. Famous works include Unité d'Habitation in Marseilles, and Notre Dame du Haut in Ronchamp.",
+    "activities": [
+      {
+        "type": "sleep",
+        "duration": 6,
+        "start": 0,
+        "description": "Sleep"
+      },
+      {
+        "type": "exercise",
+        "duration": 0.5,
+        "start": 6,
+        "description": "Preparing mind and body for the day ahead"
+      },
+      {
+        "type": "food",
+        "duration": 2.5,
+        "start": 6.5,
+        "description": "Breakfast with wife"
+      },
+      {
+        "type": "creative",
+        "duration": 5.5,
+        "start": 9,
+        "description": "Painting, drawing, writing"
+      },
+      {
+        "type": "admin",
+        "duration": 3,
+        "start": 14.5,
+        "description": "Office hours (getting others to work on his ideas)"
+      },
+      {
+        "type": "food",
+        "duration": 5.5,
+        "start": 17.5,
+        "description": "Time at home"
+      },
+      {
+        "type": "sleep",
+        "duration": 1,
+        "start": 23,
+        "description": "Sleep"
+      }
+    ]
+  },
+  {
+    "name": "Victor Hugo",
+    "type": "Writer",
+    "description": "This French writer brought the world ‘Les Misérables’ and ‘The Hunchback of Notre-Dame’, among other novels. He was one of the few Romanticists to have achieved popularity during his lifetime. ",
+    "activities": [
+      {
+        "type": "sleep",
+        "duration": 6,
+        "start": 0,
+        "description": "Sleep"
+      },
+      {
+        "type": "food",
+        "duration": 0.5,
+        "start": 6,
+        "description": "Coffee and two raw eggs"
+      },
+      {
+        "type": "creative",
+        "duration": 4.5,
+        "start": 6.5,
+        "description": "Writing"
+      },
+      {
+        "type": "other",
+        "duration": 1,
+        "start": 11,
+        "description": "Ice bath on the roof"
+      },
+      {
+        "type": "food",
+        "duration": 1,
+        "start": 12,
+        "description": "Guests and lunch"
+      },
+      {
+        "type": "exercise",
+        "duration": 2,
+        "start": 13,
+        "description": "Long, strenuous exercise"
+      },
+      {
+        "type": "other",
+        "duration": 1,
+        "start": 15,
+        "description": "Visit to the barber"
+      },
+      {
+        "type": "food",
+        "duration": 2,
+        "start": 16,
+        "description": "Date"
+      },
+      {
+        "type": "creative",
+        "duration": 2,
+        "start": 18,
+        "description": "Writing"
+      },
+      {
+        "type": "food",
+        "duration": 2,
+        "start": 20,
+        "description": "Dinner, playing cards, going out"
+      },
+      {
+        "type": "sleep",
+        "duration": 2,
+        "start": 22,
+        "description": "Sleep"
+      }
+    ]
+  },
+  {
+    "name": "Wolfgang Amadeus Mozart",
+    "type": "Composer",
+    "description": "A composer from the age of 5, Mozart worked prolifically throughout his life.  He created such masterpieces as ‘Symphony No. 40’ and the opera ‘Don Giovanni’. ",
+    "activities": [
+      {
+        "type": "creative",
+        "duration": 1,
+        "start": 0,
+        "description": "Composing"
+      },
+      {
+        "type": "sleep",
+        "duration": 5,
+        "start": 1,
+        "description": "Sleep"
+      },
+      {
+        "type": "other",
+        "duration": 1,
+        "start": 6,
+        "description": "Getting dressed"
+      },
+      {
+        "type": "creative",
+        "duration": 2,
+        "start": 7,
+        "description": "Composing"
+      },
+      {
+        "type": "admin",
+        "duration": 4,
+        "start": 9,
+        "description": "Giving music lessons"
+      },
+      {
+        "type": "food",
+        "duration": 4,
+        "start": 13,
+        "description": "Lunch with friends"
+      },
+      {
+        "type": "creative",
+        "duration": 4,
+        "start": 17,
+        "description": "Composing or giving concerts"
+      },
+      {
+        "type": "food",
+        "duration": 2,
+        "start": 21,
+        "description": "Time with friends"
+      },
+      {
+        "type": "creative",
+        "duration": 1,
+        "start": 23,
+        "description": "Composing"
+      }
+    ]
+  },
+  {
+    "name": "Charles Darwin",
+    "type": "Scientist",
+    "description": "In ‘The Origin of the Species’, Darwin established his theory of evolution, along with his place in history as a revolutionary thinker.",
+    "activities": [
+      {
+        "type": "sleep",
+        "duration": 7,
+        "start": 0,
+        "description": "Sleep"
+      },
+      {
+        "type": "exercise",
+        "duration": 0.5,
+        "start": 7,
+        "description": "Walk"
+      },
+      {
+        "type": "food",
+        "duration": 0.5,
+        "start": 7.5,
+        "description": "Breakfast"
+      },
+      {
+        "type": "creative",
+        "duration": 1.5,
+        "start": 8,
+        "description": "Focused work"
+      },
+      {
+        "type": "admin",
+        "duration": 1,
+        "start": 9.5,
+        "description": "Reading mail"
+      },
+      {
+        "type": "creative",
+        "duration": 1.5,
+        "start": 10.5,
+        "description": "Work"
+      },
+      {
+        "type": "exercise",
+        "duration": 0.5,
+        "start": 12,
+        "description": "Walking the dog"
+      },
+      {
+        "type": "food",
+        "duration": 0.5,
+        "start": 12.5,
+        "description": "Lunch"
+      },
+      {
+        "type": "admin",
+        "duration": 1,
+        "start": 13,
+        "description": "Reading newspapers"
+      },
+      {
+        "type": "admin",
+        "duration": 1,
+        "start": 14,
+        "description": "Writing letters"
+      },
+      {
+        "type": "sleep",
+        "duration": 1,
+        "start": 15,
+        "description": "Nap"
+      },
+      {
+        "type": "exercise",
+        "duration": 0.5,
+        "start": 16,
+        "description": "Walk"
+      },
+      {
+        "type": "admin",
+        "duration": 1,
+        "start": 16.5,
+        "description": "Admin bits and bobs"
+      },
+      {
+        "type": "food",
+        "duration": 0.5,
+        "start": 17.5,
+        "description": "Idleness"
+      },
+      {
+        "type": "food",
+        "duration": 1,
+        "start": 18,
+        "description": "Reading for pleasure"
+      },
+      {
+        "type": "food",
+        "duration": 1,
+        "start": 19,
+        "description": "Tea with egg"
+      },
+      {
+        "type": "food",
+        "duration": 1,
+        "start": 20,
+        "description": "Playing backgammon"
+      },
+      {
+        "type": "admin",
+        "duration": 1,
+        "start": 21,
+        "description": "Reading science books"
+      },
+      {
+        "type": "creative",
+        "duration": 2,
+        "start": 22,
+        "description": "Lying in bed, solving problems"
+      }
+    ]
+  },
+  {
+    "name": "Charles Dickens",
+    "type": "Writer",
+    "description": "Arguably the most famous novelist of the Victorian period, Dickens is known for his vivid characters, as found in novels like ‘Great Expectations’ and ‘The Christmas Carol’. ",
+    "activities": [
+      {
+        "type": "sleep",
+        "duration": 7,
+        "start": 0,
+        "description": "Sleep"
+      },
+      {
+        "type": "other",
+        "duration": 1,
+        "start": 7,
+        "description": "Waking up"
+      },
+      {
+        "type": "food",
+        "duration": 1,
+        "start": 8,
+        "description": "Breakfast"
+      },
+      {
+        "type": "creative",
+        "duration": 5,
+        "start": 9,
+        "description": "Writing in absolute quiet"
+      },
+      {
+        "type": "exercise",
+        "duration": 3,
+        "start": 14,
+        "description": "Walking around London"
+      },
+      {
+        "type": "food",
+        "duration": 1,
+        "start": 17,
+        "description": "Gap time"
+      },
+      {
+        "type": "food",
+        "duration": 1,
+        "start": 18,
+        "description": "Dinner"
+      },
+      {
+        "type": "food",
+        "duration": 5,
+        "start": 19,
+        "description": "Time with friends and family"
+      }
+    ]
+  },
+  {
+    "name": "Sigmund Freud",
+    "type": "Psychoanalyst",
+    "description": "Freud both shocked and intrigued European society with his theories of the human psyche and sexual urges. Writings like ‘The Interpretation of Dreams’ are still key texts in academic courses around the world. ",
+    "activities": [
+      {
+        "type": "creative",
+        "duration": 1,
+        "start": 0,
+        "description": "Writing"
+      },
+      {
+        "type": "sleep",
+        "duration": 6,
+        "start": 1,
+        "description": "Sleep"
+      },
+      {
+        "type": "food",
+        "duration": 1,
+        "start": 7,
+        "description": "Breakfast and trimming beard"
+      },
+      {
+        "type": "creative",
+        "duration": 4,
+        "start": 8,
+        "description": "Treating patients"
+      },
+      {
+        "type": "food",
+        "duration": 1,
+        "start": 12,
+        "description": "Gap time"
+      },
+      {
+        "type": "food",
+        "duration": 1,
+        "start": 13,
+        "description": "Lunch"
+      },
+      {
+        "type": "exercise",
+        "duration": 1,
+        "start": 14,
+        "description": "Speedy walk"
+      },
+      {
+        "type": "creative",
+        "duration": 6,
+        "start": 15,
+        "description": "Consulting and treating patients"
+      },
+      {
+        "type": "food",
+        "duration": 1.5,
+        "start": 21,
+        "description": "Supper and card games"
+      },
+      {
+        "type": "creative",
+        "duration": 1.5,
+        "start": 22.5,
+        "description": "Reading and writing"
+      }
+    ]
+  },
+  {
+    "name": "Vladimir Nabokov ",
+    "type": "Writer",
+    "description": "A Russian American novelist who wrote the daring ‘Lolita’. The book is among the most controversial yet enduring works of 20th century literature. ",
+    "activities": [
+      {
+        "type": "sleep",
+        "duration": 1,
+        "start": 0,
+        "description": "Trying to fall sleep"
+      },
+      {
+        "type": "sleep",
+        "duration": 6.5,
+        "start": 1,
+        "description": "Sleep"
+      },
+      {
+        "type": "food",
+        "duration": 1,
+        "start": 7.5,
+        "description": "Thinking in bed"
+      },
+      {
+        "type": "food",
+        "duration": 1.5,
+        "start": 8.5,
+        "description": "Shave, breakfast, meditation, bath"
+      },
+      {
+        "type": "creative",
+        "duration": 1,
+        "start": 10,
+        "description": "Writing"
+      },
+      {
+        "type": "exercise",
+        "duration": 0.5,
+        "start": 11,
+        "description": "Walk"
+      },
+      {
+        "type": "creative",
+        "duration": 1.5,
+        "start": 11.5,
+        "description": "Work"
+      },
+      {
+        "type": "food",
+        "duration": 1,
+        "start": 13,
+        "description": "Lunch"
+      },
+      {
+        "type": "creative",
+        "duration": 4.5,
+        "start": 14,
+        "description": "Writing"
+      },
+      {
+        "type": "exercise",
+        "duration": 0.5,
+        "start": 18.5,
+        "description": "Walk"
+      },
+      {
+        "type": "food",
+        "duration": 2,
+        "start": 19,
+        "description": "Time with family"
+      },
+      {
+        "type": "creative",
+        "duration": 2.5,
+        "start": 21,
+        "description": "Reading"
+      },
+      {
+        "type": "sleep",
+        "duration": 0.5,
+        "start": 23.5,
+        "description": "Trying to sleep"
+      }
+    ]
+  },
+  {
+    "name": "Kingsley Amis",
+    "type": "Writer",
+    "description": "This London-born writer was best known for his comedic novels. ‘Lucky Jim’ was his first and most famous. ",
+    "activities": [
+      {
+        "type": "food",
+        "duration": 0.5,
+        "start": 0,
+        "description": "Drinking"
+      },
+      {
+        "type": "sleep",
+        "duration": 7.5,
+        "start": 0.5,
+        "description": "Sleep"
+      },
+      {
+        "type": "food",
+        "duration": 1.5,
+        "start": 8,
+        "description": "Grapefruit, cereal, banana, tea"
+      },
+      {
+        "type": "creative",
+        "duration": 3.5,
+        "start": 9.5,
+        "description": "He would pick up from where he left off the previous evening"
+      },
+      {
+        "type": "food",
+        "duration": 3.5,
+        "start": 13,
+        "description": "Lunch at the pub with a drink before and a coffee after"
+      },
+      {
+        "type": "sleep",
+        "duration": 0.5,
+        "start": 16.5,
+        "description": "Nap in his favorite armchair"
+      },
+      {
+        "type": "creative",
+        "duration": 2,
+        "start": 17,
+        "description": "Main work"
+      },
+      {
+        "type": "food",
+        "duration": 4,
+        "start": 19,
+        "description": "Dinner with family, drinking scotch and water whilst settling down to his favorite television programs"
+      },
+      {
+        "type": "food",
+        "duration": 1,
+        "start": 23,
+        "description": "Final scotch and water"
+      }
+    ]
+  },
+  {
+    "name": "Thomas Mann",
+    "type": "Writer",
+    "description": "Mann’s bold use of symbolism and irony made him one of Germany’s most significant 20th century writers. He drew on influences from Nietzsche to Goethe to express the psychology of the artist and the intellectual. ",
+    "activities": [
+      {
+        "type": "sleep",
+        "duration": 8,
+        "start": 0,
+        "description": "Sleep"
+      },
+      {
+        "type": "other",
+        "duration": 1,
+        "start": 8,
+        "description": "Taking a bath"
+      },
+      {
+        "type": "creative",
+        "duration": 3,
+        "start": 9,
+        "description": "Writing"
+      },
+      {
+        "type": "food",
+        "duration": 0.5,
+        "start": 12,
+        "description": "Lunch"
+      },
+      {
+        "type": "creative",
+        "duration": 3.5,
+        "start": 12.5,
+        "description": "Reading"
+      },
+      {
+        "type": "sleep",
+        "duration": 1,
+        "start": 16,
+        "description": "Nap"
+      },
+      {
+        "type": "food",
+        "duration": 0.5,
+        "start": 17,
+        "description": "Tea with family"
+      },
+      {
+        "type": "admin",
+        "duration": 1.5,
+        "start": 17.5,
+        "description": "Reading newspapers, mail"
+      },
+      {
+        "type": "exercise",
+        "duration": 0.5,
+        "start": 19,
+        "description": "Walk"
+      },
+      {
+        "type": "food",
+        "duration": 4.5,
+        "start": 19.5,
+        "description": "Time with family, guests, listening to music"
+      }
+    ]
+  },
+  {
+    "name": "Richard Strauss",
+    "type": "Composer",
+    "description": "A leading composer of the German Romantic movement, Strauss is most famed for his operas, including the modern, dissonant work ‘Salome’, which produced a highly passionate reaction from the audience who cheered for 38 curtain calls. ",
+    "activities": [
+      {
+        "type": "sleep",
+        "duration": 8,
+        "start": 0,
+        "description": "Sleep"
+      },
+      {
+        "type": "food",
+        "duration": 1.5,
+        "start": 8,
+        "description": "Breakfast of 3 eggs, tea, and jam; bath"
+      },
+      {
+        "type": "exercise",
+        "duration": 0.5,
+        "start": 9.5,
+        "description": "Walk"
+      },
+      {
+        "type": "creative",
+        "duration": 3,
+        "start": 10,
+        "description": "Composing"
+      },
+      {
+        "type": "food",
+        "duration": 1,
+        "start": 13,
+        "description": "Lunch with friends"
+      },
+      {
+        "type": "food",
+        "duration": 1,
+        "start": 14,
+        "description": "Reading or playing games"
+      },
+      {
+        "type": "creative",
+        "duration": 1,
+        "start": 15,
+        "description": "Composing"
+      },
+      {
+        "type": "food",
+        "duration": 1,
+        "start": 16,
+        "description": "Dinner and tea"
+      },
+      {
+        "type": "exercise",
+        "duration": 1,
+        "start": 17,
+        "description": "Walk"
+      },
+      {
+        "type": "admin",
+        "duration": 1,
+        "start": 18,
+        "description": "Writing letters"
+      },
+      {
+        "type": "food",
+        "duration": 2.5,
+        "start": 19,
+        "description": "Dinner and socialising"
+      },
+      {
+        "type": "food",
+        "duration": 0.5,
+        "start": 21.5,
+        "description": "Reading for pleasure"
+      },
+      {
+        "type": "sleep",
+        "duration": 2,
+        "start": 22,
+        "description": "Sleep"
+      }
+    ]
+  },
+  {
+    "name": "Pyotr Ilyich Tchaikovsky",
+    "type": "Composer",
+    "description": "Russia’s most famous composer, Tchaikovsky created works throughout his life, including ‘The Nutcracker’ and ‘The Sleeping Beauty’. Piano lessons began when he was just 5 years old and prompted a life-long fascination with music.",
+    "activities": [
+      {
+        "type": "sleep",
+        "duration": 8,
+        "start": 0,
+        "description": "Sleep"
+      },
+      {
+        "type": "food",
+        "duration": 1,
+        "start": 8,
+        "description": "Tea, smoking, reading bible and philosophy"
+      },
+      {
+        "type": "exercise",
+        "duration": 0.5,
+        "start": 9,
+        "description": "Walk"
+      },
+      {
+        "type": "admin",
+        "duration": 0.5,
+        "start": 9.5,
+        "description": "Mail"
+      },
+      {
+        "type": "creative",
+        "duration": 2,
+        "start": 10,
+        "description": "Composing"
+      },
+      {
+        "type": "food",
+        "duration": 1,
+        "start": 12,
+        "description": "Lunch"
+      },
+      {
+        "type": "exercise",
+        "duration": 2,
+        "start": 13,
+        "description": "Long walk"
+      },
+      {
+        "type": "food",
+        "duration": 2,
+        "start": 15,
+        "description": "Tea, reading newspapers"
+      },
+      {
+        "type": "creative",
+        "duration": 2,
+        "start": 17,
+        "description": "Composing"
+      },
+      {
+        "type": "other",
+        "duration": 1,
+        "start": 19,
+        "description": "Gap time"
+      },
+      {
+        "type": "food",
+        "duration": 4,
+        "start": 20,
+        "description": "Dinner, having guests, socialising"
+      }
+    ]
+  },
+  {
+    "name": "Franz Kafka",
+    "type": "Writer",
+    "description": "The author of ‘Metamorphosis’, Prague-born Kafka helped shape the course of modern literature, exploring existential themes of alienation and fear.",
+    "activities": [
+      {
+        "type": "creative",
+        "duration": 6,
+        "start": 0,
+        "description": "Writing"
+      },
+      {
+        "type": "sleep",
+        "duration": 2.5,
+        "start": 6,
+        "description": "Sleeping after struggling to fall asleep"
+      },
+      {
+        "type": "admin",
+        "duration": 6,
+        "start": 8.5,
+        "description": "Work at the worker's accident insurance institute"
+      },
+      {
+        "type": "food",
+        "duration": 1,
+        "start": 14.5,
+        "description": "Lunch"
+      },
+      {
+        "type": "sleep",
+        "duration": 4,
+        "start": 15.5,
+        "description": "Catching up on sleep"
+      },
+      {
+        "type": "exercise",
+        "duration": 1.5,
+        "start": 19.5,
+        "description": "Exercises next to the window, then a walk"
+      },
+      {
+        "type": "food",
+        "duration": 2,
+        "start": 21,
+        "description": "Dinner with family"
+      },
+      {
+        "type": "creative",
+        "duration": 1,
+        "start": 23,
+        "description": "Writing"
+      }
+    ]
+  },
+  {
+    "name": "Gustave Flaubert",
+    "type": "Writer",
+    "description": "Author of the controversial ‘Madame Bovary’, Flaubert was charged with immorality by the government. Luckily, he was acquitted and continued to write his candid portraits of life in French society.",
+    "activities": [
+      {
+        "type": "creative",
+        "duration": 3,
+        "start": 0,
+        "description": "Writing"
+      },
+      {
+        "type": "sleep",
+        "duration": 7,
+        "start": 3,
+        "description": "Sleep"
+      },
+      {
+        "type": "admin",
+        "duration": 0.5,
+        "start": 10,
+        "description": "Newspapers, mail"
+      },
+      {
+        "type": "other",
+        "duration": 0.5,
+        "start": 10.5,
+        "description": "Taking a bath"
+      },
+      {
+        "type": "food",
+        "duration": 1,
+        "start": 11,
+        "description": "Light breakfast, typically eggs, vegetables, cheese or fruit and a cup of cold chocolate"
+      },
+      {
+        "type": "exercise",
+        "duration": 1,
+        "start": 12,
+        "description": "Outdoor stroll with family"
+      },
+      {
+        "type": "admin",
+        "duration": 1,
+        "start": 13,
+        "description": "Teaching history"
+      },
+      {
+        "type": "creative",
+        "duration": 5,
+        "start": 14,
+        "description": "Creative work, mostly reading"
+      },
+      {
+        "type": "food",
+        "duration": 1,
+        "start": 19,
+        "description": "Dinner with family"
+      },
+      {
+        "type": "food",
+        "duration": 1.5,
+        "start": 20,
+        "description": "Time with family, talking to mother"
+      },
+      {
+        "type": "creative",
+        "duration": 2.5,
+        "start": 21.5,
+        "description": "Creative work"
+      }
+    ]
+  },
+  {
+    "name": "Pablo Picasso",
+    "type": "Painter",
+    "description": "Potentially the most important painter of the 20th century, Picasso’s long career spanned many styles of artwork, including the angular lines of Cubism, for which he is most well-known.",
+    "activities": [
+      {
+        "type": "creative",
+        "duration": 2.5,
+        "start": 0,
+        "description": "Painting"
+      },
+      {
+        "type": "sleep",
+        "duration": 8.5,
+        "start": 2.5,
+        "description": "Sleep"
+      },
+      {
+        "type": "food",
+        "duration": 4,
+        "start": 11,
+        "description": "Breakfast, seeing friends"
+      },
+      {
+        "type": "creative",
+        "duration": 7.5,
+        "start": 15,
+        "description": "Painting"
+      },
+      {
+        "type": "food",
+        "duration": 1,
+        "start": 22.5,
+        "description": "Dinner"
+      },
+      {
+        "type": "creative",
+        "duration": 0.5,
+        "start": 23.5,
+        "description": "Painting"
+      }
+    ]
+  },
+  {
+    "name": "William Styron",
+    "type": "Writer",
+    "description": "Author of ‘Sophie’s Choice’, Styron was an American novelist considered to be one of the true original writers of his generation. His work often caused controversy for exploring challenging moral themes and morbid subject matter. ",
+    "activities": [
+      {
+        "type": "food",
+        "duration": 1,
+        "start": 0,
+        "description": "Up at night"
+      },
+      {
+        "type": "food",
+        "duration": 2,
+        "start": 1,
+        "description": "Listening to music, drinking, smoking"
+      },
+      {
+        "type": "sleep",
+        "duration": 9,
+        "start": 3,
+        "description": "Sleep"
+      },
+      {
+        "type": "food",
+        "duration": 1.5,
+        "start": 12,
+        "description": "Reading and thinking in bed"
+      },
+      {
+        "type": "food",
+        "duration": 1,
+        "start": 13.5,
+        "description": "Lunch"
+      },
+      {
+        "type": "admin",
+        "duration": 1.5,
+        "start": 14.5,
+        "description": "Errands, mail"
+      },
+      {
+        "type": "creative",
+        "duration": 4,
+        "start": 16,
+        "description": "Writing"
+      },
+      {
+        "type": "food",
+        "duration": 4,
+        "start": 20,
+        "description": "Dinner with family, then listening to music, drinking, smoking"
+      }
+    ]
+  }
+]

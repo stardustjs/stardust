@@ -1,0 +1,117 @@
+---
+---
+
+@import "reset";
+@import "variables";
+@import "utils";
+@import "typography";
+
+body {
+    font-family: $main-font;
+    font-size: $main-font-size;
+    color: $main-color;
+    box-sizing: border-box;
+}
+
+
+
+header {
+    margin: 20px auto;
+    padding: 0 20px;
+    max-width: $main-width;
+    font-size: 1.2em;
+    line-height: 1.2em;
+    a {
+        margin-right: 1em;
+    }
+}
+
+section {
+    margin: 20px auto;
+    padding: 0 20px;
+    max-width: $main-width;
+}
+
+section.with-sidebar {
+    display: flex;
+    flex-direction: column;
+    flex-flow: initial;
+    margin-top: 2em;
+    & > aside {
+        margin: 0;
+        flex: 0 0 auto;
+        padding-right: 1em;
+    }
+    & > .content {
+        padding-left: 1em;
+        flex: 1 1 auto;
+        h1 { margin-top: 0; }
+    }
+}
+
+footer {
+    margin: 20px auto;
+    padding: 0 20px;
+    max-width: $main-width;
+    font-size: 0.8em;
+    color: $gray-color;
+}
+
+.examples {
+    list-style-type: none;
+    margin: 0; padding: 0;
+    li {
+        width: calc(100% / 3);
+        margin: 0; padding: 0;
+        display: block;
+        float: left;
+        text-align: center;
+        cursor: pointer;
+        position: relative;
+        border: 2px solid transparent;
+        box-sizing: border-box;
+
+        img {
+            width: 100%;
+            display: block;
+        }
+
+        div.overlay {
+            position: absolute;
+            left: 0; right: 0; top: 0; bottom: 0;
+            background-color: rgba(0, 0, 0, 0.4);
+            color: rgba(255, 255, 255, 0.8);
+            display: none;
+
+            span {
+                position: absolute;
+                display: block;
+                bottom: 0; left: 0; right: 0;
+                height: 1.5em;
+                line-height: 1.5em;
+                background-color: rgba(0, 0, 0, 0.4);
+            }
+        }
+
+        &:hover {
+            div.overlay {
+                display: block;
+            }
+        }
+    }
+}
+
+iframe.example-container {
+    outline: 1px solid $border-color;
+}
+
+.documentation-sidebar {
+    list-style-type: none;
+    text-align: right;
+    margin: 0;
+    padding-right: 1em;
+    border-right: 2px solid $border-color;
+    li {
+        padding: 0.5em 0;
+    }
+}

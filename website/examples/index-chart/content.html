@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<title>Stardust Example: Scatterplot</title>
+<link rel="stylesheet" href="../common/style.css" type="text/css" />
+<style type="text/css">
+    .chart canvas,
+    .chart svg {
+        position: absolute;
+        left: 0;
+        top: 0;
+    }
+
+    .chart svg {
+        pointer-events: none;
+    }
+
+    .axis path,
+    .axis line {
+        fill: none;
+        stroke: black;
+        shape-rendering: crispEdges;
+    }
+
+    .axis text {
+        font-family: sans-serif;
+        font-size: 13px;
+    }
+
+    .hline,
+    .vline {
+        stroke: black;
+        shape-rendering: crispEdges;
+    }
+
+    .vline {
+        stroke: rgb(220, 57, 18);
+    }
+</style>
+<div class="chart">
+    <canvas id="main-canvas"></canvas>
+    <svg id="main-svg"></svg>
+</div>
+<div class="initializing"><p>Initializing...</p></div>
+<script src="//d3js.org/d3.v3.min.js" type="text/javascript"></script>
+<script src="../common/stardust/stardust.bundle.js" type="text/javascript"></script>
+<script src="../common/utils.js" type="text/javascript"></script>
+<script type="text/javascript">
+    let width = 960;
+    let height = 500;
+    let margin_left = 70;
+    let margin_right = 10;
+    let margin_top = 10;
+    let margin_bottom = 30;
+    let canvas = d3.select("#main-canvas").node();
+    let svg = d3.select("#main-svg");
+    let platform = Stardust.platform("webgl-2d", canvas, width, height);
+    svg.attr("width", width).attr("height", height);
+
+    loadData("stock.csv", (data) => {
+        let names = [ "MSFT", "AAPL", "IBM", "GOOGL", "AMZN" ];
+        let colorsOriginal = [
+            [ 0x66, 0xc2, 0xa5 ],
+            [ 0xfc, 0x8d, 0x62 ],
+            [ 0x8d, 0xa0, 0xcb ],
+            [ 0xe7, 0x8a, 0xc3 ],
+            [ 0xa6, 0xd8, 0x54 ]
+        ];
+        colors = colorsOriginal.map((x) => [ x[0] / 255, x[1] / 255, x[2] / 255, 1 ]);
+        let polyline = Stardust.mark.polyline();
+
+        let polylines = Stardust.mark.create(polyline, platform);
+
+        let ranges = names.map((d) => {
+            return [ d3.min(data, (x) => +x[d]), d3.max(data, (x) => +x[d]) ];
+        });
+
+        let xScale = d3.time.scale()
+            .domain([ d3.min(data, (d) => +d.Time * 1000), d3.max(data, (d) => +d.Time * 1000) ])
+            .range([ margin_left, width - margin_right ]);
+
+        let yScale = Stardust.scale.linear()
+            .domain([ 0, 1000 ])
+            .range([ height - margin_bottom, margin_top ]);
+
+        let legendItems = svg.append("g").selectAll("g").data(names)
+            .enter().append("g")
+        legendItems
+            .attr("transform", (d, i) => `translate(${margin_left + 20}, ${margin_top + 20 * i + 10})`)
+        legendItems.append("line")
+            .attr("x1", 0).attr("x2", 15).attr("y1", 0).attr("y2", 0)
+            .style("stroke", (d, i) => `rgb(${colorsOriginal[i].join(",")})`);
+        legendItems.append("text")
+            .attr("x", 20).attr("y", 5).text(d => d)
+            .style("fill", (d, i) => `rgb(${colorsOriginal[i].join(",")})`);
+
+        svg.append("g")
+            .classed("axis", true)
+            .attr("transform", `translate(0, ${height - margin_bottom})`)
+            .call(d3.svg.axis().scale(xScale).orient("bottom").tickFormat(d3.time.format("%Y")));
+        let gYAxis = svg.append("g")
+            .classed("axis", true)
+            .attr("transform", `translate(${margin_left}, 0)`)
+
+        let hline = svg.append("line")
+            .classed("hline", true)
+            .attr("x1", margin_left)
+            .attr("x2", width - margin_right)
+        let vline = svg.append("line")
+            .classed("vline", true)
+            .attr("y1", margin_top)
+            .attr("y2", height - margin_bottom)
+
+        let indexScale = d3.scale.linear()
+            .domain([ 1 / 3, 3 ])
+            .range(yScale.range());
+
+        polylines
+            .attr("p", Stardust.scale.Vector2(d => xScale(d.time), yScale(d => d.value)))
+            .attr("width", 1)
+            .attr("color", [ 0, 0, 0, 0.4 ]);
+
+        let refIdx = 0;
+
+        polylines.instance((d, i) => {
+            return data.map((x) => {
+                return { time: +x.Time * 1000, value: +x[d] };
+            })
+        }, (d, i) => {
+            yScale.domain([ data[refIdx][d] * indexScale.domain()[0], data[refIdx][d] * indexScale.domain()[1] ]);
+            return { color: colors[i] };
+        });
+
+        polylines.data(names);
+
+        let rerender = () => {
+            indexScale.domain([
+                d3.min(ranges, (x, i) => x[0] / data[refIdx][names[i]]),
+                d3.max(ranges, (x, i) => x[1] / data[refIdx][names[i]])
+            ]);
+            hline.attr("y1", indexScale(1));
+            hline.attr("y2", indexScale(1));
+            vline.attr("x1", xScale(+data[refIdx].Time * 1000));
+            vline.attr("x2", xScale(+data[refIdx].Time * 1000));
+            gYAxis.call(d3.svg.axis().scale(indexScale).orient("left").tickFormat(d3.format(".0%")));
+            platform.clear();
+            polylines.render();
+        }
+
+        rerender();
+
+        d3.select(canvas).on("mousemove", () => {
+            let left = canvas.getBoundingClientRect().left;
+            let x = d3.event.clientX;
+            let d3xscale = d3.scale.linear().domain(xScale.domain()).range(xScale.range());
+            let t = d3xscale.invert(x - left) / 1000;
+            let idx = Math.floor((t - data[0].Time) / (data[data.length - 1].Time - data[0].Time) * (data.length - 1));
+            idx = Math.max(Math.min(idx, data.length - 1), 0);
+            refIdx = idx;
+            requestAnimationFrame(rerender);
+        });
+    });
+</script>

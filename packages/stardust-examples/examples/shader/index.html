@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<title>Stardust Example: Scatterplot</title>
+<link rel="stylesheet" href="../common/style.css" type="text/css" />
+<canvas id="main-canvas"></canvas>
+<div class="initializing"><p>Initializing...</p></div>
+<script src="//d3js.org/d3.v3.min.js" type="text/javascript"></script>
+<script src="../common/stardust/stardust.bundle.js" type="text/javascript"></script>
+<script src="../common/utils.js" type="text/javascript"></script>
+<script type="text/javascript">
+    var canvas = document.getElementById("main-canvas");
+    var width = 960;
+    var height = 500;
+    var platform = Stardust.platform("webgl-2d", canvas, width, height);
+
+    var Nx = 96 * 1;
+    var Ny = 50 * 1;
+
+    var data = [];
+    for(var i = 0; i < Nx; i++) {
+        for(var j = 0; j < Ny; j++) {
+            var x = i / (Nx - 1) * 2 - 1;
+            var y = j / (Ny - 1) * 2 - 1;
+            var scale = 2;
+            var len = Math.sqrt(x * x + y * y);
+            var d = len * Math.exp(-len * len * 5);
+            var dx = y / len * d;
+            var dy = -x / len * d;
+            data.push({
+                x: x + dx * scale,
+                y: y + dy * scale
+            });
+        }
+    }
+
+    let circle = new Stardust.mark.compile(`
+        mark Mark(center: Vector2, radius: float, color: Color, k: float) {
+            emit [
+                { position: center + Vector2(-radius, -radius), color: color, off: Vector2(-1, -1), k: k },
+                { position: center + Vector2(-radius, radius), color: color, off: Vector2(-1, 1), k: k },
+                { position: center + Vector2(radius, radius), color: color, off: Vector2(1, 1), k: k },
+                { position: center + Vector2(-radius, -radius), color: color, off: Vector2(-1, -1), k: k },
+                { position: center + Vector2(radius, -radius), color: color, off: Vector2(1, -1), k: k },
+                { position: center + Vector2(radius, radius), color: color, off: Vector2(1, 1), k: k }
+            ];
+        }
+    `)["Mark"];
+
+    var testShader = Stardust.shader.compile(`
+        shader Default(color: Color, off: Vector2, k: float) {
+            let r = exp(-sqrt(off.x * off.x + off.y * off.y) * k);
+            emit { color: Color(color.r, color.g, color.b, r) };
+        }
+    `)["Default"];
+
+    var circles = Stardust.mark.create(circle, testShader, platform);
+
+    var scaleX = Stardust.scale.linear()
+        .domain([ -1, 1 ])
+        .range([ 10, width - 10 ]);
+    var scaleY = Stardust.scale.linear()
+        .domain([ -1, 1 ])
+        .range([ 10, height - 10 ]);
+    circles.attr("center", Stardust.scale.Vector2(scaleX(d => d.x), scaleY(d => d.y)));
+    circles.attr("radius", 10);
+    circles.attr("color", [ 0, 0, 0, 0.4 ]);
+    circles.attr("k", 5);
+
+    circles.data(data);
+    circles.render();
+
+    var t0 = new Date().getTime();
+    setInterval(() => {
+        var time = new Date().getTime() - t0;
+        circles.attr("k", 8 + Math.sin(time / 1000) * 2);
+        platform.clear();
+        circles.render();
+    }, 10);
+</script>

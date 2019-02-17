@@ -1,0 +1,3 @@
+[submodule "stardustjs.github.io"]
+	path = stardustjs.github.io
+	url = https://github.com/stardustjs/stardustjs.github.io

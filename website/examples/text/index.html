@@ -1,0 +1,88 @@
+---
+layout: default
+title: "Stardust Example: Text"
+---
+<h1>Stardust Example: Text</h1>
+<iframe class="example-container" src="content.html" width="960px" height="500px" scrolling="no" sandbox="allow-popups allow-scripts allow-forms allow-same-origin"></iframe>
+
+<h2>index.html</h2>
+<pre><code class="highlight html">&lt;!DOCTYPE html&gt;
+&lt;meta charset&#x3D;&quot;utf-8&quot;&gt;
+&lt;link rel&#x3D;&quot;stylesheet&quot; href&#x3D;&quot;..&#x2F;common&#x2F;style.css&quot; type&#x3D;&quot;text&#x2F;css&quot; &#x2F;&gt;
+&lt;style type&#x3D;&quot;text&#x2F;css&quot;&gt;
+    #main-canvas {
+        margin: 0;
+        padding: 0;
+        position: absolute;
+        left: 0;
+        top: 0
+    }
+&lt;&#x2F;style&gt;
+&lt;canvas id&#x3D;&quot;main-canvas&quot;&gt;&lt;&#x2F;canvas&gt;
+&lt;div class&#x3D;&quot;fps&quot;&gt;&lt;&#x2F;div&gt;
+&lt;div class&#x3D;&quot;initializing&quot;&gt;
+    &lt;p&gt;Initializing...&lt;&#x2F;p&gt;
+&lt;&#x2F;div&gt;
+&lt;script src&#x3D;&quot;&#x2F;&#x2F;d3js.org&#x2F;d3.v3.min.js&quot; type&#x3D;&quot;text&#x2F;javascript&quot;&gt;&lt;&#x2F;script&gt;
+&lt;script src&#x3D;&quot;..&#x2F;common&#x2F;stardust&#x2F;stardust.bundle.js&quot; type&#x3D;&quot;text&#x2F;javascript&quot;&gt;&lt;&#x2F;script&gt;
+&lt;script src&#x3D;&quot;..&#x2F;common&#x2F;utils.js&quot; type&#x3D;&quot;text&#x2F;javascript&quot;&gt;&lt;&#x2F;script&gt;
+&lt;script type&#x3D;&quot;text&#x2F;javascript&quot;&gt;
+    var canvas &#x3D; document.getElementById(&quot;main-canvas&quot;);
+    var width &#x3D; 960;
+    var height &#x3D; 500;
+    var margin &#x3D; 10;
+    var marginLeft &#x3D; 35;
+    var marginBottom &#x3D; 20;
+    var platform &#x3D; Stardust.platform(&quot;webgl-2d&quot;, canvas, width, height);
+
+    var text &#x3D; Stardust.mark.createText(&quot;2d&quot;, platform);
+    var circles &#x3D; Stardust.mark.create(Stardust.mark.circle(), platform);
+
+    var scaleLeft2 &#x3D; Stardust.scale.custom(&#x60;
+        Vector2(
+            (R - r) * cos(value) + d * cos((R &#x2F; r - 1) * value),
+            (R - r) * sin(value) - d * sin((R &#x2F; r - 1) * value)
+        ) * size + center
+    &#x60;).attr(&quot;d&quot;, 2.19).attr(&quot;R&quot;, 5).attr(&quot;r&quot;, 5 * (7 &#x2F; 16)).attr(&quot;size&quot;, 40).attr(&quot;center&quot;, &quot;Vector2&quot;, [480, 250]);
+
+    text.attr(&quot;text&quot;, (d) &#x3D;&gt; d);
+    text.attr(&quot;up&quot;, [0, 1]);
+    text.attr(&quot;position&quot;, scaleLeft2(d &#x3D;&gt; d * 41));
+    circles.attr(&quot;center&quot;, scaleLeft2(d &#x3D;&gt; d * 41));
+    var data &#x3D; [];
+    for (var i &#x3D; 0; i &lt;&#x3D; 300; i++) {
+        data[i] &#x3D; i &#x2F; (300) * Math.PI * 2;
+    }
+    text.data(data);
+    circles.data(data);
+    circles.attr(&quot;radius&quot;, 2);
+
+    var scaleColor &#x3D; Stardust.scale.custom(&#x60;hcl2rgb(Color(value + shift, 0.5, 0.5, 0.5))&#x60;);
+    scaleColor.attr(&quot;shift&quot;, 0);
+
+    text.attr(&quot;fontFamily&quot;, &quot;Arial&quot;);
+    text.attr(&quot;fontSize&quot;, 12);
+    text.attr(&quot;scale&quot;, d &#x3D;&gt; (1 + Math.sin(d) &#x2F; 2));
+    text.attr(&quot;color&quot;, scaleColor(d &#x3D;&gt; d));
+    circles.attr(&quot;color&quot;, scaleColor(d &#x3D;&gt; d));
+
+    var fps &#x3D; new FPS();
+    var t0 &#x3D; new Date().getTime();
+
+    var render &#x3D; function () {
+        var t &#x3D; new Date().getTime() - t0;
+        scaleColor.attr(&quot;shift&quot;, t &#x2F; 1000);
+        scaleLeft2.attr(&quot;d&quot;, 2.95 + Math.sin(t &#x2F; 500) * 0.4);
+
+        text.attr(&quot;text&quot;, (d) &#x3D;&gt; (d + Math.sin(t &#x2F; 1000)).toFixed(2));
+        text.render();
+        text.attr(&quot;alignX&quot;, 0.5);
+        text.attr(&quot;alignY&quot;, 0);
+        circles.render();
+        fps.update();
+
+        requestAnimationFrame(render);
+    }
+
+    render();
+&lt;&#x2F;script&gt;</code></pre>

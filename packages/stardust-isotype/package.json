@@ -1,0 +1,32 @@
+{
+  "name": "stardust-isotype",
+  "description": "Isotype shapes for Stardust",
+  "author": {
+    "name": "Donghao Ren",
+    "email": "donghao.ren@gmail.com",
+    "url": "https://donghaoren.org/"
+  },
+  "version": "0.2.0",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:stardust-vis/stardust-isotype.git"
+  },
+  "main": "dist/stardust-isotype.js",
+  "typings": "dist/stardust-isotype.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc -p .",
+    "test": "mocha test",
+    "prepublish": "yarn run build",
+    "watch": "tsc -w -p ."
+  },
+  "dependencies": {
+    "earcut": "^2.1.1"
+  },
+  "peerDependencies": {
+    "stardust-core": "^0.2.0"
+  },
+  "license": "BSD-3-Clause"
+}

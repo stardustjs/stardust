@@ -1,0 +1,73 @@
+body {
+    margin: 0;
+    padding: 0;
+    font-size: 14px;
+    box-sizing: border-box;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    user-select: none;
+    font-family: "Helvetica Neue", "Helvetica", "Arial", sans-serif;
+}
+div, p { margin: 0; padding: 0; font-size: 14px; line-height: 1em; }
+canvas, svg { margin: 0; padding: 0; display: block }
+.fps {
+    float: right;
+    display: block;
+    height: 30px;
+    padding-right: 10px;
+    line-height: 30px;
+    font-size: 15px;
+    font-family: "Helvetica Neue", "Helvetica", "Arial", sans-serif;
+}
+[data-switch] {
+    margin: 0; padding: 0 0px;
+    line-height: 30px;
+    height: 30px;
+    width: 960px;
+}
+[data-switch] [data-value] {
+    font-size: 14px;
+    font-family: "Helvetica Neue", "Helvetica", "Arial", sans-serif;
+    display: inline-block;
+    margin: 0; padding: 0; border: none;
+    outline: none;
+    border-radius: 2px;
+    padding-left: 10px; padding-right: 10px;
+    padding-top: 2px; padding-bottom: 2px;
+    line-height: 18px;
+    margin: 3px;
+    margin-right: 0;
+    vertical-align: top;
+    cursor: pointer;
+    background: #EEE;
+    border: 1px solid #CCC;
+    color: black;
+}
+[data-switch] [data-value]:hover {
+    background: #2196F3;
+    color: #FFF;
+    border: 1px solid #1E88E5;
+}
+[data-switch] [data-value].active {
+    background: #1565C0;
+    color: #FFF;
+    border: 1px solid #0D47A1;
+}
+
+.initializing, .loading {
+    position: fixed;
+    left: 0; right: 0;
+    top: 0;
+    bottom: 0;
+    padding-top: 220px;
+    text-align: center;
+    font-size: 20px;
+    background: rgba(192, 192, 192, 0.8);
+    color: #555;
+}
+
+.initializing p, .loading p {
+    font-size: 20px;
+    line-height: 40px;
+    height: 40px;
+}

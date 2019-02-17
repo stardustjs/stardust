@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<link rel="stylesheet" href="../common/style.css" type="text/css" />
+<style type="text/css">
+    #main-canvas { margin: 0; padding: 0; position: absolute; left: 0; top: 0 }
+    #main-svg { margin: 0; padding: 0; position: absolute; left: 0; top: 0 }
+    .axis path,
+    .axis line {
+        fill: none;
+        stroke: black;
+        shape-rendering: crispEdges;
+    }
+</style>
+<canvas id="main-canvas"></canvas>
+<svg id="main-svg"></svg>
+<div data-switch="mode" style="margin-top: 470px">
+    <button class="active" data-value="mode1">Mode 1</button><button data-value="mode2">Mode 2</button>
+    <div class="fps"></div>
+</div>
+<div class="initializing"><p>Initializing...</p></div>
+<script src="//d3js.org/d3.v3.min.js" type="text/javascript"></script>
+<script src="../common/stardust/stardust.bundle.js" type="text/javascript"></script>
+<script src="../common/utils.js" type="text/javascript"></script>
+<script type="text/javascript">
+    // Create Stardust platform from canvas element
+    var canvas = document.getElementById("main-canvas");
+    var width = 960;
+    var height = 470;
+    var margin = 10;
+    var marginLeft = 35;
+    var marginBottom = 20;
+    var platform = Stardust.platform("webgl-2d", canvas, width, height);
+
+    // Declare the glyph with the custom mark type
+    var glyphMark = Stardust.mark.compile(`
+        import { Triangle } from P2D;
+
+        mark Glyph(
+            x: float, y: float,
+            v1: float, v2: float, v3: float, v4: float,
+            color: Color = [ 0, 0, 0, 0.8 ]
+        ) {
+            let c = Vector2(x, y);
+            let p1 = Vector2(x + v1, y);
+            let p2 = Vector2(x, y + v2);
+            let p3 = Vector2(x - v3, y);
+            let p4 = Vector2(x, y - v4);
+            Triangle(c, p1, p2, color);
+            Triangle(c, p2, p3, color);
+            Triangle(c, p3, p4, color);
+            Triangle(c, p4, p1, color);
+        }
+    `);
+
+    // Create glyphs with our glyphMark
+    var glyphs = Stardust.mark.create(glyphMark.Glyph, platform);
+
+    var glyphSize = 20;
+
+    var colors = [ [228,26,28], [55,126,184], [77,175,74] ].map((d) => [ d[0] / 255, d[1] / 255, d[2] / 255, 0.8 ]);
+    var cylinders2Color = [
+        0, 0, 0, 0, 0, 1, 1, 2, 2
+    ]
+
+    loadData("car.csv", (data) => {
+        var scale1 = Stardust.scale.linear()
+            .domain(d3.extent(data, d => d.Horsepower)).range([ 0, glyphSize ]);
+        var scale2 = Stardust.scale.linear()
+            .domain(d3.extent(data, d => d.Weight)).range([ 0, glyphSize ]);
+        var scale3 = Stardust.scale.linear()
+            .domain(d3.extent(data, d => d.Acceleration)).range([ 0, glyphSize ]);
+        var scale4 = Stardust.scale.linear()
+            .domain(d3.extent(data, d => d.ModelYear)).range([ 0, glyphSize ]);
+        var scaleX1 = Stardust.scale.linear()
+            .domain(d3.extent(data, d => d.MPG)).range([ marginLeft, width - margin ]);
+        var scaleY1 = Stardust.scale.linear()
+            .domain(d3.extent(data, d => d.Displacement)).range([ margin, height - marginBottom ]);
+
+        var scaleX2 = Stardust.scale.linear()
+            .domain(d3.extent(data, d => d.Weight)).range([ marginLeft, width - margin ]);
+        var scaleY2 = Stardust.scale.linear()
+            .domain(d3.extent(data, d => d.Acceleration)).range([ margin, height - marginBottom ]);
+
+        var interp = Stardust.scale.interpolate()
+        interp.t(0);
+
+        glyphs
+            .attr("x", interp(scaleX1(d => d.MPG), scaleX2(d => d.Weight)))
+            .attr("y", interp(scaleY1(d => d.Displacement), scaleY2(d => d.Acceleration)))
+            .attr("v1", interp(scale1(d => d.Horsepower), scale1(d => d.Horsepower)))
+            .attr("v2", interp(scale2(d => d.Weight), scale1(d => d.Horsepower)))
+            .attr("v3", interp(scale3(d => d.Acceleration), scale1(d => d.Horsepower)))
+            .attr("v4", interp(scale4(d => d.ModelYear), scale1(d => d.Horsepower)))
+            .attr("color", d => colors[cylinders2Color[d.Cylinders]]);
+
+        glyphs.data(data);
+
+
+        // Draw axes with d3.
+        var svg = d3.select("#main-svg")
+            .attr("width", width)
+            .attr("height", height)
+
+        var gMode1 = svg.append("g");
+        var gMode2 = svg.append("g");
+
+        gMode1.append("g").classed("axis", true)
+            .attr("transform", `translate(0, ${height - marginBottom})`)
+            .call(d3.svg.axis().scale(d3.scale.linear().domain(scaleX1.domain()).range(scaleX1.range())).orient("bottom"))
+            .append("text").text("MPG").attr("x", width - margin).attr("y", -4).style("text-anchor", "end");
+
+        gMode1.append("g").classed("axis", true)
+            .attr("transform", `translate(${marginLeft}, 0)`)
+            .call(d3.svg.axis().scale(d3.scale.linear().domain(scaleY1.domain()).range(scaleY1.range())).orient("left"))
+            .append("text").text("Displacement").attr("x", 5).attr("y", 20);
+
+        gMode2.append("g").classed("axis", true)
+            .attr("transform", `translate(0, ${height - marginBottom})`)
+            .call(d3.svg.axis().scale(d3.scale.linear().domain(scaleX2.domain()).range(scaleX2.range())).orient("bottom"))
+            .append("text").text("Weight").attr("x", width - margin).attr("y", -4).style("text-anchor", "end");
+
+        gMode2.append("g").classed("axis", true)
+            .attr("transform", `translate(${marginLeft}, 0)`)
+            .call(d3.svg.axis().scale(d3.scale.linear().domain(scaleY2.domain()).range(scaleY2.range())).orient("left"))
+            .append("text").text("Acceleration").attr("x", 5).attr("y", 20);
+
+        function render() {
+            platform.clear();
+            glyphs.render();
+            gMode1.style("opacity", interp.t());
+            gMode2.style("opacity", 1 - interp.t());
+        }
+
+        render();
+
+        switches.mode_changed = function(newMode) {
+            beginTransition((t) => {
+                if(newMode == "mode1")
+                    interp.t(1 - t);
+                if(newMode == "mode2")
+                    interp.t(t);
+                render();
+            });
+        }
+    });
+</script>

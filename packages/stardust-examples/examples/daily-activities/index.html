@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<link rel="stylesheet" href="../common/style.css" type="text/css" />
+<canvas id="main-canvas"></canvas>
+<div data-switch="mode">
+    <button class="active" data-value="mode1">Circular</button><button data-value="mode2">Linear</button>
+    <div class="fps"></div>
+</div>
+<div class="initializing"><p>Initializing...</p></div>
+<script src="//d3js.org/d3.v3.min.js" type="text/javascript"></script>
+<script src="../common/stardust/stardust.bundle.js" type="text/javascript"></script>
+<script src="../common/utils.js" type="text/javascript"></script>
+<script type="text/javascript">
+    // Create Stardust platform from canvas element
+    var canvas = document.getElementById("main-canvas");
+    var width = 960;
+    var height = 470;
+    var platform = Stardust.platform("webgl-2d", canvas, width, height);
+
+    // Create bar marks using wedge
+    var barMark = Stardust.mark.compile(`
+        import { Wedge } from P2D;
+
+        mark Bar(
+            index: float,
+            center: Vector2,
+            vcenter: Vector2,
+            radius: float,
+            t1: float,
+            t2: float,
+            t: float,
+            width: float,
+            width2: float,
+            color: Color = [ 0, 0, 0, 1 ]
+        ) {
+            let thetaA = (t1 - 6) / 12.0 * PI;
+            let thetaB = (t2 - 6) / 12.0 * PI;
+            let cP1 = center + Vector2(cos(thetaA), sin(thetaA)) * radius;
+            let k = 1.5;
+            if(t1 + t2 < 12) k = -0.5;
+            let ss = 2;
+            let ti = t * (1 + ss) - ss + (1 - index) * ss;
+            if(ti < 0) ti = 0;
+            if(ti > 1) ti = 1;
+            Wedge(
+                mix(cP1, vcenter + Vector2(t1 * 38, 0), ti),
+                mix(thetaA, PI * k, ti),
+                mix(thetaB, PI * k, ti),
+                mix(radius * (thetaB - thetaA), (t2 - t1) * 38, ti),
+                mix(width2, width, ti),
+                color
+            );
+        }
+    `);
+
+    // Create bars with our barMark
+    var bars = Stardust.mark.create(barMark.Bar, platform);
+
+    // Use D3's scale for colors
+    var colorScale = d3.scale.category10();
+
+    loadData("data.json", (data) => {
+        // Layout parameters
+        let yScale = d3.scale.linear().domain([ 0, data.length - 1 ]).range([ 15, height - 15 ]);
+        let h = (yScale(1) - yScale(0)) * 0.8;
+        let sz = Math.sqrt((width - 15) * (height - 15) / data.length / 5);
+        let grouping = Math.floor(width / sz / 2);
+
+        // Attributes
+        bars.attr("t", 0);
+        bars.attr("t1", d => d.start);
+        bars.attr("t2", d => d.start + d.duration);
+        bars.attr("color", d => Stardust.Color.FromHTML(colorScale(d.type)));
+        bars.attr("width", h);
+        bars.attr("width2", sz * 0.3);
+
+        // Instancing
+        bars.instance(
+            d => d.activities,
+            (d, i) => {
+                return {
+                    index: i / (data.length - 1),
+                    center: [ i % grouping * sz * 2 + sz + 4, Math.floor(i / grouping) * sz * 2 + sz + 10 ],
+                    radius: sz - sz * 0.3 / 2 - 2,
+                    vcenter: [ 20, yScale(i) ]
+                };
+            }
+        );
+
+        // Set data items to bars
+        bars.data(data);
+
+        // Render/Re-render bars
+        function render() {
+            platform.clear();
+            bars.render();
+        }
+
+        render();
+
+        // Handle switches and animation timing
+        switches.mode_changed = function(newValue) {
+            beginTransition((t) => {
+                if(newValue == "mode1")
+                    bars.attr("t", 1 - t);
+                if(newValue == "mode2")
+                    bars.attr("t", t);
+                render();
+            });
+        };
+    });
+</script>

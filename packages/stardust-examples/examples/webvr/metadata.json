@@ -1,0 +1,4 @@
+{
+    "description": "Stardust Example: WebVR",
+    "excludes": [ "webvr-polyfill.min.js" ]
+}
