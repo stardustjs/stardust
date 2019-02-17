@@ -55,4 +55,4 @@ async function renderExamples(destination: string) {
   }
 }
 
-renderExamples("../../stardustjs.github.io/examples");
+renderExamples("../../website/examples");

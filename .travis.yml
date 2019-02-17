@@ -4,6 +4,7 @@ node_js:
 rvm: 2.4.1
 
 install:
+  - npm install -g yarn
   - gem install bundler
 
 before_script:
@@ -11,6 +12,6 @@ before_script:
   - cd website && bundle install
 
 script:
-  - yarn test
   - yarn build
+  - ls
   - cd website && bundle exec jekyll build
