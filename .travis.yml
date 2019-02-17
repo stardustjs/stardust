@@ -23,7 +23,7 @@ deploy:
   provider: pages
   skip-cleanup: true
   keep-history: true
-  target-branc: master
+  target-branch: master
   local-dir: website/_site
   repo: stardustjs/stardustjs.github.io
   github-token:
