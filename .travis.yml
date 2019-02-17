@@ -1,4 +1,16 @@
 language: node_js
 node_js:
-    - "10"
+  - "10"
+rvm: 2.4.1
 
+install:
+  - gem install bundler
+
+before_script:
+  - yarn
+  - cd website && bundle install
+
+script:
+  - yarn test
+  - yarn build
+  - cd website && bundle exec jekyll build
