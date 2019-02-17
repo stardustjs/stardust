@@ -22,7 +22,8 @@ script:
 deploy:
   provider: pages
   skip-cleanup: true
-  keep-history: false
+  keep-history: true
+  target-branc: master
   local-dir: website/_site
   repo: stardustjs/stardustjs.github.io
   github-token:
