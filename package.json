@@ -27,6 +27,7 @@
     "watch": "node utils/build.js watch",
     "test": "node utils/build.js test",
     "prettify": "prettier 'packages/**/{src,test}/**/*.{ts,tsx,js}' --write",
+    "prettify:examples": "prettier 'packages/stardust-examples/**/*.{html,js,css}' --print-width 120 --write",
     "lint:fix": "tslint 'packages/**/src/**/*.ts' --fix",
     "lint": "tslint 'packages/**/src/**/*.ts'"
   },

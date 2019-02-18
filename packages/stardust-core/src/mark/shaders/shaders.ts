@@ -1,0 +1,27 @@
+import * as Specification from "../../specification/specification";
+import { compile } from "../compile";
+
+export function basic(): Specification.Shader {
+  return compile(`
+        shader Default(
+            color: Color = [ 0, 0, 0, 1 ]
+        ) {
+            emit { color: color };
+        }
+    `).Default;
+}
+
+export function lighting(): Specification.Shader {
+  return compile(`
+        shader Default(
+            color: Color = [ 0, 0, 0, 1 ],
+            normal: Vector3,
+            position: Vector3
+        ) {
+            let lighting = get_camera_direction(position);
+            let NdotL = abs(dot(normal, lighting));
+            let s = NdotL * 0.5 + 0.5;
+            emit { color: Color(s * color.r, s * color.g, s * color.b, color.a) };
+        }
+    `).Default;
+}

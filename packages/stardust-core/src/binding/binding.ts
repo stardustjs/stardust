@@ -2,7 +2,6 @@
 // Take care of data binding.
 
 import * as Specification from "../specification/specification";
-import { MathType } from "../common";
 import { TextureBinding } from "./array";
 import { RuntimeError } from "../common";
 import {

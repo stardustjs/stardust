@@ -139,6 +139,9 @@ export interface Mark {
 
   repeatBegin?: number;
   repeatEnd?: number;
+
+  /** The default shader for this mark */
+  shader?: Shader;
 }
 
 /** Shader specification */

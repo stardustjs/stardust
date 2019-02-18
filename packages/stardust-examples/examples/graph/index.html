@@ -1,260 +1,257 @@
 <!DOCTYPE html>
-<meta charset="utf-8">
+<meta charset="utf-8" />
 <link rel="stylesheet" href="../common/style.css" type="text/css" />
 <style type="text/css">
-    .fps {
-        position: fixed;
-        top: 0;
-        right: 0;
-        padding: 10px;
-        margin: 0;
-        font-size: 15px;
-    }
+  .fps {
+    position: fixed;
+    top: 0;
+    right: 0;
+    padding: 10px;
+    margin: 0;
+    font-size: 15px;
+  }
 
-    .sliders {
-        position: absolute;
-        left: 710px;
-        width: 220px;
-        top: 50px;
-        bottom: 0;
-    }
+  .sliders {
+    position: absolute;
+    left: 710px;
+    width: 220px;
+    top: 50px;
+    bottom: 0;
+  }
 
-    .sliders label {
-        display: block;
-        font-weight: bold;
-    }
+  .sliders label {
+    display: block;
+    font-weight: bold;
+  }
 
-    .sliders input {
-        display: block;
-        width: 100%;
-        margin: 5px 0;
-    }
+  .sliders input {
+    display: block;
+    width: 100%;
+    margin: 5px 0;
+  }
 </style>
 <canvas id="main-canvas"></canvas>
 <div class="sliders"></div>
 <div class="fps"></div>
 <div class="initializing">
-    <p>Initializing...</p>
+  <p>Initializing...</p>
 </div>
 <script src="//d3js.org/d3.v4.min.js" type="text/javascript"></script>
 <script src="../common/stardust/stardust.bundle.js" type="text/javascript"></script>
 <script src="../common/utils.js" type="text/javascript"></script>
 <script type="text/javascript">
-    var canvas = document.getElementById("main-canvas");
-    var width = 700;
-    var height = 500;
-    var platform = Stardust.platform("webgl-2d", canvas, width, height);
-    platform.pixelRatio = window.devicePixelRatio || 1;
+  var canvas = document.getElementById("main-canvas");
+  var width = 700;
+  var height = 500;
+  var platform = Stardust.platform("webgl-2d", canvas, width, height);
+  platform.pixelRatio = window.devicePixelRatio || 1;
 
-    var snodes = Stardust.mark.create(Stardust.mark.circle(8), platform);
-    var snodesBG = Stardust.mark.create(Stardust.mark.circle(8), platform);
-    var snodesSelected = Stardust.mark.create(Stardust.mark.circle(8), platform);
-    var sedges = Stardust.mark.create(Stardust.mark.line(), platform);
+  var snodes = Stardust.mark.create(Stardust.mark.circle(8), platform);
+  var snodesBG = Stardust.mark.create(Stardust.mark.circle(8), platform);
+  var snodesSelected = Stardust.mark.create(Stardust.mark.circle(8), platform);
+  var sedges = Stardust.mark.create(Stardust.mark.line(), platform);
 
-    loadData("facebook_1912_clusters.json", (data) => {
-        var nodes = data.nodes;
-        var edges = data.edges;
-        var N = nodes.length;
+  loadData("facebook_1912_clusters.json", data => {
+    var nodes = data.nodes;
+    var edges = data.edges;
+    var N = nodes.length;
 
-        for (var i = 0; i < N; i++) {
-            nodes[i].index = i;
-            nodes[i].x = Math.random() * width;
-            nodes[i].y = Math.random() * height;
-        }
+    for (var i = 0; i < N; i++) {
+      nodes[i].index = i;
+      nodes[i].x = Math.random() * width;
+      nodes[i].y = Math.random() * height;
+    }
 
-        let colors = [
-            [31, 119, 180],
-            [255, 127, 14],
-            [44, 160, 44],
-            [214, 39, 40],
-            [148, 103, 189],
-            [140, 86, 75],
-            [227, 119, 194],
-            [127, 127, 127],
-            [188, 189, 34],
-            [23, 190, 207]
-        ];
-        colors = colors.map((x) => [x[0] / 255, x[1] / 255, x[2] / 255, 1]);
+    let colors = [
+      [31, 119, 180],
+      [255, 127, 14],
+      [44, 160, 44],
+      [214, 39, 40],
+      [148, 103, 189],
+      [140, 86, 75],
+      [227, 119, 194],
+      [127, 127, 127],
+      [188, 189, 34],
+      [23, 190, 207]
+    ];
+    colors = colors.map(x => [x[0] / 255, x[1] / 255, x[2] / 255, 1]);
 
-        snodes
-            .attr("radius", 2)
-            .attr("color", d => colors[d.cluster]);
-        snodesBG
-            .attr("radius", 3)
-            .attr("color", [1, 1, 1, 0.5]);
+    snodes.attr("radius", 2).attr("color", d => colors[d.cluster]);
+    snodesBG.attr("radius", 3).attr("color", [1, 1, 1, 0.5]);
 
-        snodesSelected
-            .attr("radius", 4)
-            .attr("color", [228 / 255, 26 / 255, 28 / 255, 1]);
+    snodesSelected.attr("radius", 4).attr("color", [228 / 255, 26 / 255, 28 / 255, 1]);
 
-        sedges
-            .attr("width", 0.5)
-            .attr("color", d => {
-                if (d.source.cluster == d.target.cluster) return colors[d.source.cluster].slice(0, 3).concat([0.1]);
-                return [0.5, 0.5, 0.5, 0.1]
-            });
-
-        var force = d3.forceSimulation()
-            .force("link", d3.forceLink().id(function (d) { return d.index }))
-            .force("charge", d3.forceManyBody())
-            .force("forceX", d3.forceX(width / 2))
-            .force("forceY", d3.forceY(height / 2))
-
-        force.nodes(nodes);
-        force.force("link").links(edges);
-
-        force.force("forceX").strength(0.5);
-        force.force("forceY").strength(0.5);
-        force.force("link").distance(50);
-        force.force("link").strength(0.05);
-        force.force("charge").strength(-40);
-
-
-        function makeSlider(name, attr, min, max, defaultValue) {
-            d3.select(".sliders").append("label").text(name);
-            var slider = d3.select(".sliders").append("input");
-            slider
-                .attr("type", "range")
-                .attr("min", 0)
-                .attr("max", 1000)
-                .attr("value", (defaultValue - min) / (max - min) * 1000)
-            slider.on("input", () => {
-                var val = +slider.property("value");
-                var d = val / 1000 * (max - min) + min;
-                if(attr == "gravity") {
-                    force.force("forceX").strength(d);
-                    force.force("forceY").strength(d);
-                }
-                if(attr == "linkDistance") {
-                    force.force("link").distance(d);
-                }
-                if(attr == "linkStrength") {
-                    force.force("link").strength(d);
-                }
-                if(attr == "charge") {
-                    force.force("charge").strength(d);
-                }
-                force.alphaTarget(0.3).restart();
-            });
-        }
-
-        // makeSlider("Friction", "friction", 0.01, 1, 0.5);
-        makeSlider("Gravity", "gravity", 0.01, 1, 0.5);
-        makeSlider("Charge", "charge", -200, 0, -40);
-        makeSlider("Link Distance", "linkDistance", 0, 200, 50);
-        makeSlider("Link Strength", "linkStrength", 0, 0.2, 0.05);
-
-        var positions = Stardust.array("Vector2")
-            .value(d => [d.x, d.y])
-            .data(nodes);
-
-        var positionScale = Stardust.scale.custom("array(pos, value)")
-            .attr("pos", "Vector2Array", positions)
-        snodesSelected.attr("center", positionScale(d => d.index));
-        snodes.attr("center", positionScale(d => d.index));
-        snodesBG.attr("center", positionScale(d => d.index));
-        sedges.attr("p1", positionScale(d => d.source.index));
-        sedges.attr("p2", positionScale(d => d.target.index));
-
-        snodesBG.data(nodes);
-        snodes.data(nodes);
-        sedges.data(edges);
-
-        force.on("tick", () => {
-            if (isDragging && selectedNode && draggingLocation) {
-                selectedNode.x = draggingLocation[0];
-                selectedNode.y = draggingLocation[1];
-            }
-            positions.data(nodes);
-            requestRender();
-        });
-
-        requestRender();
-
-        // Handle dragging
-
-        let selectedNode = null;
-
-        var requested = null;
-        function requestRender() {
-            if (requested) return;
-            requested = requestAnimationFrame(render);
-        }
-
-        var fps = new FPS();
-
-        function render() {
-            requested = null;
-            snodesSelected.data(selectedNode ? [selectedNode] : []);
-
-            // Cleanup and re-render.
-            platform.clear([1, 1, 1, 1]);
-            sedges.render();
-            snodesBG.render();
-            snodes.attr("radius", 2);
-            snodes.render();
-
-            snodesSelected.render();
-
-            // Render the picking buffer.
-            platform.beginPicking(canvas.width, canvas.height);
-            snodes.attr("radius", 6); // make radius larger so it's easier to select.
-            snodes.render();
-            platform.endPicking();
-
-            fps.update();
-        }
-
-        var isDragging = false;
-        var draggingLocation = null;
-        // Handle dragging.
-        canvas.onmousedown = function (e) {
-            var x = e.clientX - canvas.getBoundingClientRect().left;
-            var y = e.clientY - canvas.getBoundingClientRect().top;
-            var p = platform.getPickingPixel(x * platform.pixelRatio, y * platform.pixelRatio);
-            if (p) {
-                selectedNode = nodes[p[1]];
-                requestRender();
-                isDragging = true;
-                draggingLocation = [selectedNode.x, selectedNode.y];
-                var onMove = function (e) {
-                    var nx = e.clientX - canvas.getBoundingClientRect().left;
-                    var ny = e.clientY - canvas.getBoundingClientRect().top;
-                    selectedNode.x = nx;
-                    selectedNode.y = ny;
-                    draggingLocation = [nx, ny];
-                    force.alphaTarget(0.3).restart();
-                    requestRender();
-                };
-                var onUp = function () {
-                    window.removeEventListener("mousemove", onMove);
-                    window.removeEventListener("mouseup", onUp);
-                    selectedNode = null;
-                    draggingLocation = null;
-                    isDragging = false;
-                };
-                window.addEventListener("mousemove", onMove);
-                window.addEventListener("mouseup", onUp);
-            }
-        };
-
-        canvas.onmousemove = function (e) {
-            if (isDragging) return;
-            var x = e.clientX - canvas.getBoundingClientRect().left;
-            var y = e.clientY - canvas.getBoundingClientRect().top;
-            var p = platform.getPickingPixel(x * platform.pixelRatio, y * platform.pixelRatio);
-            if (p) {
-                if (selectedNode != nodes[p[1]]) {
-                    selectedNode = nodes[p[1]];
-                    requestRender();
-                }
-            } else {
-                if (selectedNode != null) {
-                    selectedNode = null;
-                    requestRender();
-                }
-            }
-        }
+    sedges.attr("width", 0.5).attr("color", d => {
+      if (d.source.cluster == d.target.cluster) return colors[d.source.cluster].slice(0, 3).concat([0.1]);
+      return [0.5, 0.5, 0.5, 0.1];
     });
 
+    var force = d3
+      .forceSimulation()
+      .force(
+        "link",
+        d3.forceLink().id(function(d) {
+          return d.index;
+        })
+      )
+      .force("charge", d3.forceManyBody())
+      .force("forceX", d3.forceX(width / 2))
+      .force("forceY", d3.forceY(height / 2));
+
+    force.nodes(nodes);
+    force.force("link").links(edges);
+
+    force.force("forceX").strength(0.5);
+    force.force("forceY").strength(0.5);
+    force.force("link").distance(50);
+    force.force("link").strength(0.05);
+    force.force("charge").strength(-40);
+
+    function makeSlider(name, attr, min, max, defaultValue) {
+      d3.select(".sliders")
+        .append("label")
+        .text(name);
+      var slider = d3.select(".sliders").append("input");
+      slider
+        .attr("type", "range")
+        .attr("min", 0)
+        .attr("max", 1000)
+        .attr("value", ((defaultValue - min) / (max - min)) * 1000);
+      slider.on("input", () => {
+        var val = +slider.property("value");
+        var d = (val / 1000) * (max - min) + min;
+        if (attr == "gravity") {
+          force.force("forceX").strength(d);
+          force.force("forceY").strength(d);
+        }
+        if (attr == "linkDistance") {
+          force.force("link").distance(d);
+        }
+        if (attr == "linkStrength") {
+          force.force("link").strength(d);
+        }
+        if (attr == "charge") {
+          force.force("charge").strength(d);
+        }
+        force.alphaTarget(0.3).restart();
+      });
+    }
+
+    // makeSlider("Friction", "friction", 0.01, 1, 0.5);
+    makeSlider("Gravity", "gravity", 0.01, 1, 0.5);
+    makeSlider("Charge", "charge", -200, 0, -40);
+    makeSlider("Link Distance", "linkDistance", 0, 200, 50);
+    makeSlider("Link Strength", "linkStrength", 0, 0.2, 0.05);
+
+    var positions = Stardust.array("Vector2")
+      .value(d => [d.x, d.y])
+      .data(nodes);
+
+    var positionScale = Stardust.scale.custom("array(pos, value)").attr("pos", "Vector2Array", positions);
+    snodesSelected.attr("center", positionScale(d => d.index));
+    snodes.attr("center", positionScale(d => d.index));
+    snodesBG.attr("center", positionScale(d => d.index));
+    sedges.attr("p1", positionScale(d => d.source.index));
+    sedges.attr("p2", positionScale(d => d.target.index));
+
+    snodesBG.data(nodes);
+    snodes.data(nodes);
+    sedges.data(edges);
+
+    force.on("tick", () => {
+      if (isDragging && selectedNode && draggingLocation) {
+        selectedNode.x = draggingLocation[0];
+        selectedNode.y = draggingLocation[1];
+      }
+      positions.data(nodes);
+      requestRender();
+    });
+
+    requestRender();
+
+    // Handle dragging
+
+    let selectedNode = null;
+
+    var requested = null;
+    function requestRender() {
+      if (requested) return;
+      requested = requestAnimationFrame(render);
+    }
+
+    var fps = new FPS();
+
+    function render() {
+      requested = null;
+      snodesSelected.data(selectedNode ? [selectedNode] : []);
+
+      // Cleanup and re-render.
+      platform.clear([1, 1, 1, 1]);
+      sedges.render();
+      snodesBG.render();
+      snodes.attr("radius", 2);
+      snodes.render();
+
+      snodesSelected.render();
+
+      // Render the picking buffer.
+      platform.beginPicking(canvas.width, canvas.height);
+      snodes.attr("radius", 6); // make radius larger so it's easier to select.
+      snodes.render();
+      platform.endPicking();
+
+      fps.update();
+    }
+
+    var isDragging = false;
+    var draggingLocation = null;
+    // Handle dragging.
+    canvas.onmousedown = function(e) {
+      var x = e.clientX - canvas.getBoundingClientRect().left;
+      var y = e.clientY - canvas.getBoundingClientRect().top;
+      var p = platform.getPickingPixel(x * platform.pixelRatio, y * platform.pixelRatio);
+      if (p) {
+        selectedNode = nodes[p[1]];
+        requestRender();
+        isDragging = true;
+        draggingLocation = [selectedNode.x, selectedNode.y];
+        var onMove = function(e) {
+          var nx = e.clientX - canvas.getBoundingClientRect().left;
+          var ny = e.clientY - canvas.getBoundingClientRect().top;
+          selectedNode.x = nx;
+          selectedNode.y = ny;
+          draggingLocation = [nx, ny];
+          force.alphaTarget(0.3).restart();
+          requestRender();
+        };
+        var onUp = function() {
+          window.removeEventListener("mousemove", onMove);
+          window.removeEventListener("mouseup", onUp);
+          selectedNode = null;
+          draggingLocation = null;
+          isDragging = false;
+        };
+        window.addEventListener("mousemove", onMove);
+        window.addEventListener("mouseup", onUp);
+      }
+    };
+
+    canvas.onmousemove = function(e) {
+      if (isDragging) return;
+      var x = e.clientX - canvas.getBoundingClientRect().left;
+      var y = e.clientY - canvas.getBoundingClientRect().top;
+      var p = platform.getPickingPixel(x * platform.pixelRatio, y * platform.pixelRatio);
+      if (p) {
+        if (selectedNode != nodes[p[1]]) {
+          selectedNode = nodes[p[1]];
+          requestRender();
+        }
+      } else {
+        if (selectedNode != null) {
+          selectedNode = null;
+          requestRender();
+        }
+      }
+    };
+  });
 </script>

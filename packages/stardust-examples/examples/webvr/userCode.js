@@ -1,7 +1,6 @@
 function UserCode(platform, callback) {
-    d3.json("beethoven.json", (err, DATA) => {
-
-        let marks = Stardust.mark.compile(`
+  d3.json("beethoven.json", (err, DATA) => {
+    let marks = Stardust.mark.compile(`
             import { Triangle } from P3D;
 
             mark Point(
@@ -89,88 +88,91 @@ function UserCode(platform, callback) {
             }
         `);
 
-        let mark = Stardust.mark.create(marks.Glyph, platform);
-        let lineChart = Stardust.mark.create(marks.LineChart, platform);
+    let mark = Stardust.mark.create(marks.Glyph, platform);
+    let lineChart = Stardust.mark.create(marks.LineChart, platform);
 
-        DATA.forEach((d) => {
-            d.duration = (d.checkInFirst - d.checkOut) / 86400;
-            d.checkOut = new Date(d.checkOut * 1000);
-            d.checkIn = new Date(d.checkInFirst * 1000);
-        });
-        DATA = DATA.filter((d) => {
-            if(!d.checkIn || !d.checkOut) return false;
-            if(d.duration > 360) return false;
-            return d.checkOut.getFullYear() >= 2007 && d.checkOut.getFullYear() < 2016 && d.checkIn.getFullYear() >= 2007 && d.checkIn.getFullYear() < 2016;
-        });
-
-        // Daily summary.
-        let days = new Map();
-        DATA.forEach((d) => {
-        let day = Math.floor(d.checkOut.getTime() / 1000 / 86400) * 86400;
-        if(!days.has(day)) days.set(day, 1);
-        else days.set(day, days.get(day) + 1);
-        });
-        let daysArray = [];
-        days.forEach((count, day) => {
-            daysArray.push({ day: new Date(day * 1000), count: count });
-        });
-        daysArray.sort((a, b) => a.day.getTime() - b.day.getTime());
-
-        let colorScale = d3.scale.category10();
-        let color = (d) => {
-            let rgb = d3.rgb(colorScale(d.deweyClass));
-            return [ rgb.r / 255, rgb.g / 255, rgb.b / 255, 0.5 ];
-        };
-
-        let dayOfYear = (d) => {
-            return Math.floor((d - new Date(d.getFullYear(), 0, 0)) / 86400000);
-        }
-        let secondOfDay = (d) => {
-            return d.getMinutes() * 60 + d.getHours() * 3600 + d.getSeconds();
-        }
-        mark.attr("duration", (d) => d.duration);
-        mark.attr("year", (d) => d.checkOut.getFullYear());
-        mark.attr("dayOfYear", (d) => dayOfYear(d.checkOut));
-        mark.attr("secondOfDay", (d) => secondOfDay(d.checkOut));
-        mark.attr("color", color);
-        // mark.attr("inYear", (d) => d.checkIn.getFullYear());
-        // mark.attr("inDayOfYear", (d) => dayOfYear(d.checkIn));
-        // mark.attr("inSecondOfDay", (d) => secondOfDay(d.checkIn));
-        mark.data(DATA);
-
-        lineChart.attr("year1", (d) => d.day.getFullYear());
-        lineChart.attr("dayOfYear1", (d) => dayOfYear(d.day));
-        lineChart.attr("secondOfDay1", (d) => secondOfDay(d.day));
-        lineChart.attr("year2", (d, i) => daysArray[i + 1].day.getFullYear());
-        lineChart.attr("dayOfYear2", (d, i) => dayOfYear(daysArray[i + 1].day));
-        lineChart.attr("secondOfDay2", (d, i) => secondOfDay(daysArray[i + 1].day));
-        let zScale = Stardust.scale.linear().domain([ 0, d3.max(daysArray, (d) => d.count) ]).range([20, 60]);
-        lineChart.attr("c1", zScale((d) => d.count));
-        lineChart.attr("c2", zScale((d, i) => daysArray[i + 1].count));
-        lineChart.data(daysArray.slice(0, -1));
-
-        mark.attr("t", 0);
-
-        let t0 = new Date().getTime();
-
-        function render() {
-            let time = (new Date().getTime() - t0) / 1000;
-            let t = (Math.sin(time / 5) + 1) / 2;
-            mark.attr("t", t);
-
-            platform.setPose(
-                new Stardust.Pose(
-                    new Stardust.Vector3(0, 0, 1),
-                    new Stardust.Quaternion(0, 0, 0, 1)
-                )
-            );
-            lineChart.attr("t", mark.attr("t"));
-            lineChart.render();
-            mark.render();
-        }
-
-        callback({
-            render: render
-        });
+    DATA.forEach(d => {
+      d.duration = (d.checkInFirst - d.checkOut) / 86400;
+      d.checkOut = new Date(d.checkOut * 1000);
+      d.checkIn = new Date(d.checkInFirst * 1000);
     });
+    DATA = DATA.filter(d => {
+      if (!d.checkIn || !d.checkOut) return false;
+      if (d.duration > 360) return false;
+      return (
+        d.checkOut.getFullYear() >= 2007 &&
+        d.checkOut.getFullYear() < 2016 &&
+        d.checkIn.getFullYear() >= 2007 &&
+        d.checkIn.getFullYear() < 2016
+      );
+    });
+
+    // Daily summary.
+    let days = new Map();
+    DATA.forEach(d => {
+      let day = Math.floor(d.checkOut.getTime() / 1000 / 86400) * 86400;
+      if (!days.has(day)) days.set(day, 1);
+      else days.set(day, days.get(day) + 1);
+    });
+    let daysArray = [];
+    days.forEach((count, day) => {
+      daysArray.push({ day: new Date(day * 1000), count: count });
+    });
+    daysArray.sort((a, b) => a.day.getTime() - b.day.getTime());
+
+    let colorScale = d3.scale.category10();
+    let color = d => {
+      let rgb = d3.rgb(colorScale(d.deweyClass));
+      return [rgb.r / 255, rgb.g / 255, rgb.b / 255, 0.5];
+    };
+
+    let dayOfYear = d => {
+      return Math.floor((d - new Date(d.getFullYear(), 0, 0)) / 86400000);
+    };
+    let secondOfDay = d => {
+      return d.getMinutes() * 60 + d.getHours() * 3600 + d.getSeconds();
+    };
+    mark.attr("duration", d => d.duration);
+    mark.attr("year", d => d.checkOut.getFullYear());
+    mark.attr("dayOfYear", d => dayOfYear(d.checkOut));
+    mark.attr("secondOfDay", d => secondOfDay(d.checkOut));
+    mark.attr("color", color);
+    // mark.attr("inYear", (d) => d.checkIn.getFullYear());
+    // mark.attr("inDayOfYear", (d) => dayOfYear(d.checkIn));
+    // mark.attr("inSecondOfDay", (d) => secondOfDay(d.checkIn));
+    mark.data(DATA);
+
+    lineChart.attr("year1", d => d.day.getFullYear());
+    lineChart.attr("dayOfYear1", d => dayOfYear(d.day));
+    lineChart.attr("secondOfDay1", d => secondOfDay(d.day));
+    lineChart.attr("year2", (d, i) => daysArray[i + 1].day.getFullYear());
+    lineChart.attr("dayOfYear2", (d, i) => dayOfYear(daysArray[i + 1].day));
+    lineChart.attr("secondOfDay2", (d, i) => secondOfDay(daysArray[i + 1].day));
+    let zScale = Stardust.scale
+      .linear()
+      .domain([0, d3.max(daysArray, d => d.count)])
+      .range([20, 60]);
+    lineChart.attr("c1", zScale(d => d.count));
+    lineChart.attr("c2", zScale((d, i) => daysArray[i + 1].count));
+    lineChart.data(daysArray.slice(0, -1));
+
+    mark.attr("t", 0);
+
+    let t0 = new Date().getTime();
+
+    function render() {
+      let time = (new Date().getTime() - t0) / 1000;
+      let t = (Math.sin(time / 5) + 1) / 2;
+      mark.attr("t", t);
+
+      platform.setPose(new Stardust.Pose(new Stardust.Vector3(0, 0, 1), new Stardust.Quaternion(0, 0, 0, 1)));
+      lineChart.attr("t", mark.attr("t"));
+      lineChart.render();
+      mark.render();
+    }
+
+    callback({
+      render: render
+    });
+  });
 }
