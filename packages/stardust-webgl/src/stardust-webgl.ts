@@ -1,18 +1,23 @@
 export let version = "0.2.3";
 
+export { WebGLPlatform } from "./webgl/webgl";
 export {
-  WebGLPlatform,
   WebGLCanvasPlatform2D,
   WebGLCanvasPlatform3D,
   WebGLCanvasPlatformWebVR
-} from "./webgl/webgl";
+} from "./webgl/platforms";
 
 import { Platform } from "stardust-core";
+import { WebGLPlatform } from "./webgl/webgl";
 import {
   WebGLCanvasPlatform2D,
   WebGLCanvasPlatform3D,
   WebGLCanvasPlatformWebVR
-} from "./webgl/webgl";
+} from "./webgl/platforms";
+
+Platform.Register("webgl", (gl: WebGLRenderingContext) => {
+  return new WebGLPlatform(gl);
+});
 
 Platform.Register(
   "webgl-2d",

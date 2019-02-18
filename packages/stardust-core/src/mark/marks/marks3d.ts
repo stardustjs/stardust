@@ -4,16 +4,16 @@ export function circle3d() {
   const spec = compile(`
     mark Circle(
       center: Vector3 = [0, 0, 0],
-      size: float = 0.1,
+      radius: float = 0.1,
       color: Color = [1, 1, 1, 1]
     ) {
       let camera_direction = get_camera_direction(center);
       let ex = normalize(cross(camera_direction, Vector3(0, 1, 0)));
       let ey = cross(camera_direction, ex);
-      let p1 = center + ex * size + ey * size;
-      let p2 = center + ex * size - ey * size;
-      let p3 = center - ex * size - ey * size;
-      let p4 = center - ex * size + ey * size;
+      let p1 = center + ex * radius + ey * radius;
+      let p2 = center + ex * radius - ey * radius;
+      let p3 = center - ex * radius - ey * radius;
+      let p4 = center - ex * radius + ey * radius;
       emit [
         { position: p1, color: color, off: Vector2(1, 1) },
         { position: p3, color: color, off: Vector2(-1, -1) },

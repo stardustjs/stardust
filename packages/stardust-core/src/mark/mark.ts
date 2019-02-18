@@ -76,6 +76,7 @@ export class Mark {
       if (this._spec.input.hasOwnProperty(name)) {
         for (const { shift, suffix } of shiftBindingDescriptions) {
           if (this._spec.input.hasOwnProperty(name + suffix)) {
+            this._bindings.delete(name + suffix);
             this._shiftBindings.set(
               name + suffix,
               new ShiftBinding(name, shift)

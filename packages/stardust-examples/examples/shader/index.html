@@ -19,39 +19,36 @@
   var data = [];
   for (var i = 0; i < Nx; i++) {
     for (var j = 0; j < Ny; j++) {
-      var x = (i / (Nx - 1)) * 2 - 1;
-      var y = (j / (Ny - 1)) * 2 - 1;
-      var scale = 2;
-      var len = Math.sqrt(x * x + y * y);
-      var d = len * Math.exp(-len * len * 5);
-      var dx = (y / len) * d;
-      var dy = (-x / len) * d;
+      var u = (i / (Nx - 1)) * 2 - 1;
+      var v = (j / (Ny - 1)) * 2 - 1;
+      var theta = v * Math.PI + Math.random() * 0.5;
+      var r = Math.cos(5 * theta + Math.random() * 0.5);
       data.push({
-        x: x + dx * scale,
-        y: y + dy * scale
+        x: r * Math.cos(theta),
+        y: r * Math.sin(theta)
       });
     }
   }
 
   let circle = new Stardust.mark.compile(`
-        mark Mark(center: Vector2, radius: float, color: Color, k: float) {
-            emit [
-                { position: center + Vector2(-radius, -radius), color: color, off: Vector2(-1, -1), k: k },
-                { position: center + Vector2(-radius, radius), color: color, off: Vector2(-1, 1), k: k },
-                { position: center + Vector2(radius, radius), color: color, off: Vector2(1, 1), k: k },
-                { position: center + Vector2(-radius, -radius), color: color, off: Vector2(-1, -1), k: k },
-                { position: center + Vector2(radius, -radius), color: color, off: Vector2(1, -1), k: k },
-                { position: center + Vector2(radius, radius), color: color, off: Vector2(1, 1), k: k }
-            ];
-        }
-    `)["Mark"];
+    mark Mark(center: Vector2, radius: float, color: Color, k: float) {
+      emit [
+        { position: center + Vector2(-radius, -radius), color: color, off: Vector2(-1, -1), k: k },
+        { position: center + Vector2(-radius, radius), color: color, off: Vector2(-1, 1), k: k },
+        { position: center + Vector2(radius, radius), color: color, off: Vector2(1, 1), k: k },
+        { position: center + Vector2(-radius, -radius), color: color, off: Vector2(-1, -1), k: k },
+        { position: center + Vector2(radius, -radius), color: color, off: Vector2(1, -1), k: k },
+        { position: center + Vector2(radius, radius), color: color, off: Vector2(1, 1), k: k }
+      ];
+    }
+  `)["Mark"];
 
   var testShader = Stardust.shader.compile(`
-        shader Default(color: Color, off: Vector2, k: float) {
-            let r = exp(-sqrt(off.x * off.x + off.y * off.y) * k);
-            emit { color: Color(color.r, color.g, color.b, r) };
-        }
-    `)["Default"];
+    shader Default(color: Color, off: Vector2, k: float) {
+      let r = exp(-sqrt(off.x * off.x + off.y * off.y) * k);
+      emit { color: Color(color.r, color.g, color.b, r) };
+    }
+  `)["Default"];
 
   var circles = Stardust.mark.create(circle, testShader, platform);
 

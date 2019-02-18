@@ -1,8 +1,5 @@
-import { convertTypeName, convertConstant } from "../glsl/types";
-import { ShaderGenerator, ProgramGenerator } from "../glsl/glsl";
-import { Specification } from "stardust-core";
-import { Binding } from "stardust-core";
-import { Dictionary } from "stardust-core";
+import { Dictionary, Specification } from "stardust-core";
+import { ProgramGenerator, ShaderGenerator } from "../glsl/glsl";
 
 export enum GenerateMode {
   NORMAL = 0,
@@ -13,7 +10,7 @@ export enum GenerateMode {
 export enum ViewType {
   VIEW_2D = 0,
   VIEW_3D = 1, // 3D mode.
-  VIEW_WEBVR = 2 // WebVR mode.
+  VIEW_MATRIX = 2 // Matrix mode.
 }
 
 export class GLSLVertexShaderGenerator extends ShaderGenerator {
@@ -127,10 +124,10 @@ export class Generator extends ProgramGenerator {
         {
           this._vertex.addUniform("s3_view_params", "Vector4");
           this._vertex.addAdditionalCode(`
-                    vec4 s3_render_vertex(vec3 p) {
-                        return vec4(p.xy * s3_view_params.xy + s3_view_params.zw, 0.0, 1.0);
-                    }
-                `);
+            vec4 s3_render_vertex(vec3 p) {
+              return vec4(p.xy * s3_view_params.xy + s3_view_params.zw, 0.0, 1.0);
+            }
+          `);
         }
         break;
       case ViewType.VIEW_3D:
@@ -140,64 +137,63 @@ export class Generator extends ProgramGenerator {
           this._fragment.addUniform("s3_view_position", "Vector3");
           this._vertex.addUniform("s3_view_rotation", "Vector4");
           this._vertex.addAdditionalCode(`
-                    vec4 s3_render_vertex(vec3 p) {
-                        // Get position in view coordinates:
-                        //   v = quaternion_inverse_rotate(rotation, p - position)
-                        vec3 v = p - s3_view_position;
-                        float d = dot(s3_view_rotation.xyz, v);
-                        vec3 c = cross(s3_view_rotation.xyz, v);
-                        v = s3_view_rotation.w * s3_view_rotation.w * v - (s3_view_rotation.w + s3_view_rotation.w) * c + d * s3_view_rotation.xyz - cross(c, s3_view_rotation.xyz);
-                        // Compute projection.
-                        vec4 r;
-                        r.xy = v.xy * s3_view_params.xy;
-                        r.z = v.z * s3_view_params.z + s3_view_params.w;
-                        r.w = -v.z;
-                        return r;
-                    }
-                `);
+            vec4 s3_render_vertex(vec3 p) {
+              // Get position in view coordinates:
+              vec3 v = p - s3_view_position;
+              float d = dot(s3_view_rotation.xyz, v);
+              vec3 c = cross(s3_view_rotation.xyz, v);
+              v = s3_view_rotation.w * s3_view_rotation.w * v - (s3_view_rotation.w + s3_view_rotation.w) * c + d * s3_view_rotation.xyz - cross(c, s3_view_rotation.xyz);
+              // Compute projection.
+              vec4 r;
+              r.xy = v.xy * s3_view_params.xy;
+              r.z = v.z * s3_view_params.z + s3_view_params.w;
+              r.w = -v.z;
+              return r;
+            }
+          `);
         }
         break;
-      case ViewType.VIEW_WEBVR:
+      case ViewType.VIEW_MATRIX:
         {
-          // For WebVR, we use the MVP matrix provided by it.
+          // Use the MVP matrix provided by it.
           this._vertex.addUniform("s3_projection_matrix", "Matrix4");
           this._vertex.addUniform("s3_view_matrix", "Matrix4");
           this._vertex.addUniform("s3_view_position", "Vector3");
           this._vertex.addUniform("s3_view_rotation", "Vector4");
           this._vertex.addAdditionalCode(`
-                    vec4 s3_render_vertex(vec3 p) {
-                        vec3 v = p - s3_view_position;
-                        float d = dot(s3_view_rotation.xyz, v);
-                        vec3 c = cross(s3_view_rotation.xyz, v);
-                        v = s3_view_rotation.w * s3_view_rotation.w * v - (s3_view_rotation.w + s3_view_rotation.w) * c + d * s3_view_rotation.xyz - cross(c, s3_view_rotation.xyz);
-                        return s3_projection_matrix * s3_view_matrix * vec4(v, 1);
-                    }
-                `);
+            vec4 s3_render_vertex(vec3 p) {
+              vec3 v = p - s3_view_position;
+              float d = dot(s3_view_rotation.xyz, v);
+              vec3 c = cross(s3_view_rotation.xyz, v);
+              v = s3_view_rotation.w * s3_view_rotation.w * v - (s3_view_rotation.w + s3_view_rotation.w) * c + d * s3_view_rotation.xyz - cross(c, s3_view_rotation.xyz);
+              return s3_projection_matrix * s3_view_matrix * vec4(v, 1);
+            }
+          `);
         }
         break;
     }
     if (this._viewType == ViewType.VIEW_2D) {
       [this._vertex, this._fragment].forEach(x =>
         x.addAdditionalCode(`
-                vec3 s3_get_camera_position() {
-                    return vec3(0, 0, 1);
-                }
-                vec3 s3_get_camera_direction(vec3 p) {
-                    return vec3(0, 0, 1);
-                }
-            `)
+          vec3 s3_get_camera_position() {
+            return vec3(0, 0, 1);
+          }
+          vec3 s3_get_camera_direction(vec3 p) {
+            return vec3(0, 0, 1);
+          }
+        `)
       );
     } else {
       [this._vertex, this._fragment].forEach(x => {
         x.addUniform("s3_camera_position", "Vector3");
         x.addAdditionalCode(`
-                    vec3 s3_get_camera_position() {
-                        return s3_camera_position;
-                    }
-                    vec3 s3_get_camera_direction(vec3 p) {
-                        return normalize(s3_camera_position - p);
-                    }
-                `);
+          vec3 s3_get_camera_position() {
+            return s3_camera_position;
+          }
+          vec3 s3_get_camera_direction(vec3 p) {
+            return normalize(s3_camera_position - p);
+          }
+        `);
       });
     }
 
@@ -270,12 +266,12 @@ export class Generator extends ProgramGenerator {
 
     if (this._mode == GenerateMode.PICK) {
       this._fragmentCode = `
-                precision highp float;
-                varying vec4 out_pick_index;
-                void main() {
-                    gl_FragColor = out_pick_index;
-                }
-            `;
+        precision highp float;
+        varying vec4 out_pick_index;
+        void main() {
+          gl_FragColor = out_pick_index;
+        }
+      `;
     } else {
       // Input attributes.
 

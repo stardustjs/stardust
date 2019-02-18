@@ -43,8 +43,8 @@ export let primitives = `
             { position: p2 + F * s, color: color, normal: normal },
             { position: p1 - F * s, color: color, normal: normal },
             { position: p1 - F * s, color: color, normal: normal },
-            { position: p2 - F * s, color: color, normal: normal },
-            { position: p2 + F * s, color: color, normal: normal }
+            { position: p2 + F * s, color: color, normal: normal },
+            { position: p2 - F * s, color: color, normal: normal }
         ];
     }
 

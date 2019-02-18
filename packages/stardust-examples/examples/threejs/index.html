@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<meta charset="utf-8" />
+<link rel="stylesheet" href="../common/style.css" type="text/css" />
+<style type="text/css">
+  #main-canvas {
+    margin: 0;
+    padding: 0;
+    position: absolute;
+    left: 0;
+    top: 0;
+  }
+</style>
+<canvas id="main-canvas"></canvas>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/101/three.min.js"></script>
+<script src="../common/OrbitControls.js"></script>
+<script src="../common/stardust/stardust.bundle.js" type="text/javascript"></script>
+<script type="text/javascript">
+  // Setup the canvas
+  var canvas = document.getElementById("main-canvas");
+  var context = canvas.getContext("webgl");
+  var width = 960;
+  var height = 470;
+  var devicePixelRatio = window.devicePixelRatio || 1;
+  canvas.width = width * devicePixelRatio;
+  canvas.height = height * devicePixelRatio;
+  canvas.style.width = width + "px";
+  canvas.style.height = height + "px";
+
+  // Create THREE renderer
+  var renderer = new THREE.WebGLRenderer({
+    context: context
+  });
+  renderer.setSize(canvas.width, canvas.height);
+  renderer.setClearColor(0x202020, 1);
+
+  // Create THREE camera
+  var camera = new THREE.PerspectiveCamera(60, width / height, 0.1, 1000);
+  camera.position.set(-30, 60, 70);
+  camera.lookAt(0, 0, 0);
+
+  // Here we use the OrbitControls provided by THREE's examples
+  var controls = new THREE.OrbitControls(camera, canvas);
+  controls.minDistance = 50;
+  controls.maxDistance = 200;
+  controls.zoomSpeed = 0.5;
+  controls.rotateSpeed = 0.2;
+  controls.enableDamping = true;
+  controls.dampingFactor = 0.1;
+  controls.autoRotate = true;
+  controls.autoRotateSpeed = 0.5;
+
+  // Create THREE scene
+  var scene = new THREE.Scene();
+
+  // Add a cube to the scene
+  var material = new THREE.MeshLambertMaterial({
+    color: 0x00afaf,
+    side: THREE.DoubleSide
+  });
+  var ambientLight = new THREE.AmbientLight(0x333333);
+  scene.add(ambientLight);
+  var spotLight = new THREE.SpotLight(0xffffff);
+  spotLight.position.set(100, 300, 200);
+  scene.add(spotLight);
+
+  var cube = new THREE.Mesh(new THREE.BoxGeometry(10, 10, 10), material);
+  scene.add(cube);
+  var dodecahedron = new THREE.Mesh(new THREE.DodecahedronGeometry(8), material);
+  dodecahedron.position.set(-20, 0, 0);
+  scene.add(dodecahedron);
+  var icosahedron = new THREE.Mesh(new THREE.IcosahedronGeometry(8), material);
+  icosahedron.position.set(20, 0, 0);
+  scene.add(icosahedron);
+
+  function* lorenzAttractor() {
+    var sigma = 10;
+    var beta = 8 / 3;
+    var rho = 28;
+    var x = 1;
+    var y = 1;
+    var z = 1;
+    var t = 0;
+
+    for (let iter = 0; iter < 10000; iter++) {
+      var dx = sigma * (y - x);
+      var dy = rho * x - y - x * z;
+      var dz = -beta * z + x * y;
+      var dt = 0.01;
+      yield { x, y, z, t };
+      x += dx * dt;
+      y += dy * dt;
+      z += dz * dt;
+      t += dt;
+    }
+  }
+
+  // Create Stardust platform
+  var points = Array.from(lorenzAttractor());
+  var platform = Stardust.platform("webgl", context);
+  var scaleColor = Stardust.scale.custom(`hcl2rgb(Color(value, 0.5, 0.5, 1))`);
+
+  var lines = Stardust.mark.create(Stardust.mark.polyline3d(), platform);
+  lines.attr("p", d => [d.x, d.y, d.z]);
+  lines.attr("width", 0.2);
+  lines.attr("color", scaleColor(d => d.t));
+  lines.data(points);
+
+  var circles = Stardust.mark.create(Stardust.mark.circle3d(), platform);
+  circles.attr("center", d => [d.x, d.y, d.z]);
+  circles.attr("radius", 0.3);
+  circles.attr("color", scaleColor(d => d.t));
+  circles.data(points);
+
+  function render() {
+    controls.update();
+    spotLight.position.set(camera.position.x, camera.position.y, camera.position.z);
+
+    // Reset THREE's gl state. This is important!
+    this.renderer.state.reset();
+    renderer.clear();
+    renderer.render(scene, camera);
+
+    // Set platform's matrix and camera position from THREE's camera
+    platform.setMatrixView(camera.matrixWorldInverse.toArray(), camera.projectionMatrix.toArray());
+    platform.setCameraPosition(new Stardust.Vector3(camera.position.x, camera.position.y, camera.position.z));
+
+    // Render Stardust elements
+    lines.render();
+    circles.render();
+
+    requestAnimationFrame(render);
+  }
+  requestAnimationFrame(render);
+</script>
