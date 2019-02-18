@@ -16,26 +16,27 @@ before_script:
 script: skip
 
 jobs:
-  # Build stage
-  - stage: build
+  include:
+    # Build stage
+    - stage: build
 
-    script:
-      - yarn build
-      - cd website
-      - bundle exec jekyll build
-      - cd ..
-  # Deploy stage
-  - stage: deploy
-    # Deploy to website
-    script: skip
-    deploy:
-      provider: pages
-      skip-cleanup: true
-      keep-history: true
-      target-branch: master
-      local-dir: website/_site
-      repo: stardustjs/stardustjs.github.io
-      github-token:
-        secure: "gE6TTLIq6Z3iQXYvu4WYO1w3TB7VLopnFcHZwCwBCYIk5Y98vuimd9G2ubBlBeGX74Aga+I1wNJQg0BBP1PKWrUbMGitZECPCJw6A40KQp7kZEe9btN4/gw9W3mp+T4XTXf8nJRpkR2UVO/kLBX3XfIda006uGqaFY9boxiT3AocKMRsOBMJLbWNTvd1RR+1xPyMAEM+MMTUHpwfn0d+zBZseuMGnoGD+Y6PrUoZQVK5WaUvWoytQUUH060rThcIjCHq2e5jep5KzWjsqJNCqFu8EHITf7QiIUJUDY1O8BnJBsu8etcFTAySBiUPrX9XvUO6Ife+oxEFVJ1et7xDavMUTYwZfhlL9m5Y6kLSk2DL8ZdK6ywhzfrHspueTzELN6xuxVTt0PPbe0VNlfZfp3AEhgmT4HdLzW6g093sVDeMrmW3LaS32qnYUtR9PB7hXsbSlBO3CHoYqqYXRMtT3vts6tNoDzfWDd01UaDpQLfUucTjZ69ptTZO5IoFGB982otPsKzvhsUAgsOm314CZQdouq/72nXTLcABj7ELppk/4LAK9u2aGXauvp0GvU45WRaFZbphrD7KXIgPzZX/ghIdjt2RZB9wc2ir+UNSuTVYQdXI0rbaAK43d1Z8ZC1xMyHRhXM0TUy0R6tm2vz4i/wUqum6z+IdEJSPKALZVek="
-      on:
-        branch: master
+      script:
+        - yarn build
+        - cd website
+        - bundle exec jekyll build
+        - cd ..
+    # Deploy stage
+    - stage: deploy
+      # Deploy to website
+      script: skip
+      deploy:
+        provider: pages
+        skip-cleanup: true
+        keep-history: true
+        target-branch: master
+        local-dir: website/_site
+        repo: stardustjs/stardustjs.github.io
+        github-token:
+          secure: "gE6TTLIq6Z3iQXYvu4WYO1w3TB7VLopnFcHZwCwBCYIk5Y98vuimd9G2ubBlBeGX74Aga+I1wNJQg0BBP1PKWrUbMGitZECPCJw6A40KQp7kZEe9btN4/gw9W3mp+T4XTXf8nJRpkR2UVO/kLBX3XfIda006uGqaFY9boxiT3AocKMRsOBMJLbWNTvd1RR+1xPyMAEM+MMTUHpwfn0d+zBZseuMGnoGD+Y6PrUoZQVK5WaUvWoytQUUH060rThcIjCHq2e5jep5KzWjsqJNCqFu8EHITf7QiIUJUDY1O8BnJBsu8etcFTAySBiUPrX9XvUO6Ife+oxEFVJ1et7xDavMUTYwZfhlL9m5Y6kLSk2DL8ZdK6ywhzfrHspueTzELN6xuxVTt0PPbe0VNlfZfp3AEhgmT4HdLzW6g093sVDeMrmW3LaS32qnYUtR9PB7hXsbSlBO3CHoYqqYXRMtT3vts6tNoDzfWDd01UaDpQLfUucTjZ69ptTZO5IoFGB982otPsKzvhsUAgsOm314CZQdouq/72nXTLcABj7ELppk/4LAK9u2aGXauvp0GvU45WRaFZbphrD7KXIgPzZX/ghIdjt2RZB9wc2ir+UNSuTVYQdXI0rbaAK43d1Z8ZC1xMyHRhXM0TUy0R6tm2vz4i/wUqum6z+IdEJSPKALZVek="
+        on:
+          branch: master
