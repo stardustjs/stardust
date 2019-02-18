@@ -1,24 +1,26 @@
 import { ExamplesManager } from "./examples";
+import * as mustache from "mustache";
 import * as Templates from "./templates";
 import * as path from "path";
-import * as rimraf from "rimraf";
-import * as mkdirp from "mkdirp";
-import * as fs from "fs";
+import * as fs from "fs-extra";
 import { spawnSync } from "child_process";
 
 const manager = new ExamplesManager("./examples");
+
+async function copyCommon(destination: string) {}
+async function renderIndexHTML(destination: string) {
+  const examples = await manager.listExamples();
+  const indexMD = mustache.render(Templates.indexMDTemplate, { examples });
+  console.log(indexMD);
+}
 
 async function renderExamples(destination: string) {
   const examples = await manager.listExamples();
   for (const example of examples) {
     const files = await manager.listExampleFiles(example.name);
     const outdir = path.join(destination, example.name);
-    await new Promise((resolve, reject) => {
-      rimraf(outdir, error => {
-        resolve();
-      });
-    });
-    mkdirp.sync(outdir);
+    await fs.remove(outdir);
+    await fs.mkdirp(outdir);
     for (let f of files) {
       if (f == "README.md") {
         continue;
@@ -57,4 +59,10 @@ async function renderExamples(destination: string) {
   }
 }
 
-renderExamples("../../website/examples");
+async function renderAll() {
+  const destination = "../../website/examples";
+  await renderExamples(destination);
+  await renderIndexHTML(destination);
+}
+
+renderAll();

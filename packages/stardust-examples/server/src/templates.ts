@@ -63,3 +63,21 @@ iframe {
 <script>hljs.initHighlightingOnLoad();</script>
 
 `;
+
+export let indexMDTemplate = `---
+layout: default
+title: "Stardust Examples"
+---
+
+Stardust Examples
+====
+{{=<% %>=}}
+<ul class="examples group">
+<%#examples%>
+    <li><a href="{{base}}/<%&path%>"><img src="{{base}}/<%&path%>/preview_small.png" /><div class="overlay"><span><%description%></span></div></a></li>></a></li>
+<%/examples%>
+</ul>
+
+
+Note: Examples are written in ES6 with WebGL. They work best in the latest version of [Google Chrome](https://www.google.com/chrome/) browser.
+`;
