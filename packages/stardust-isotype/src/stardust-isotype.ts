@@ -107,4 +107,4 @@ export function isotype(svg: string): Specification.Mark {
   return custom.compile();
 }
 
-export let version = "0.2.0";
+export let version = "0.2.3";

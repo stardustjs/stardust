@@ -6,7 +6,7 @@
     "email": "donghao.ren@gmail.com",
     "url": "https://donghaoren.org/"
   },
-  "version": "0.2.0",
+  "version": "0.2.3",
   "repository": {
     "type": "git",
     "url": "git@github.com:stardust-vis/stardust-isotype.git"
@@ -26,7 +26,7 @@
     "earcut": "^2.1.1"
   },
   "peerDependencies": {
-    "stardust-core": "^0.2.0"
+    "stardust-core": "^0.2.3"
   },
   "license": "BSD-3-Clause"
 }
