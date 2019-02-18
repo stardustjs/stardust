@@ -1,4 +1,4 @@
-export let version = "0.2.3";
+export let version = "0.2.4";
 
 export { WebGLPlatform } from "./webgl/webgl";
 export {
