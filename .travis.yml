@@ -13,22 +13,19 @@ before_script:
   - bundle install
   - cd ..
 
-script: skip
+script:
+  - yarn build
+  - cd website
+  - bundle exec jekyll build
+  - cd ..
 
 jobs:
   include:
-    # Build stage
-    - stage: build
-
-      script:
-        - yarn build
-        - cd website
-        - bundle exec jekyll build
-        - cd ..
+    # Test stage
+    - stage: test
     # Deploy stage
     - stage: deploy
       # Deploy to website
-      script: skip
       deploy:
         provider: pages
         skip-cleanup: true
