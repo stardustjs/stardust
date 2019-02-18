@@ -74,7 +74,7 @@ Stardust Examples
 {{=<% %>=}}
 <ul class="examples group">
 <%#examples%>
-    <li><a href="{{base}}/<%&path%>"><img src="{{base}}/<%&path%>/preview_small.png" /><div class="overlay"><span><%description%></span></div></a></li>></a></li>
+    <li><a href="{{base}}/<%&path%>"><img src="{{base}}/<%&path%>/preview_small.png" /><div class="overlay"><span><%description%></span></div></a></li>
 <%/examples%>
 </ul>
 

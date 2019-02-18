@@ -7,11 +7,20 @@ import { spawnSync } from "child_process";
 
 const manager = new ExamplesManager("./examples");
 
-async function copyCommon(destination: string) {}
+async function copyCommon(destination: string) {
+  await fs.copy("examples/common", destination + "/common");
+  await fs.mkdirp(destination + "/common/stardust");
+  for (const filename of ["stardust.bundle.js", "stardust.bundle.min.js"]) {
+    await fs.copy(
+      "../stardust-bundle/dist/" + filename,
+      destination + "/common/stardust/" + filename
+    );
+  }
+}
 async function renderIndexHTML(destination: string) {
   const examples = await manager.listExamples();
   const indexMD = mustache.render(Templates.indexMDTemplate, { examples });
-  console.log(indexMD);
+  fs.writeFileSync(path.join(destination, "index.md"), indexMD, "utf-8");
 }
 
 async function renderExamples(destination: string) {
@@ -63,6 +72,7 @@ async function renderAll() {
   const destination = "../../website/examples";
   await renderExamples(destination);
   await renderIndexHTML(destination);
+  await copyCommon(destination);
 }
 
 renderAll();
