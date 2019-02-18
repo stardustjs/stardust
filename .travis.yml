@@ -20,7 +20,7 @@ script:
 jobs:
   include:
     - stage: test
-    - stage: deploy
+    - stage: deploy website
       if: branch = master
       deploy:
         provider: pages
@@ -31,7 +31,8 @@ jobs:
         repo: stardustjs/stardustjs.github.io
         github-token:
           secure: gE6TTLIq6Z3iQXYvu4WYO1w3TB7VLopnFcHZwCwBCYIk5Y98vuimd9G2ubBlBeGX74Aga+I1wNJQg0BBP1PKWrUbMGitZECPCJw6A40KQp7kZEe9btN4/gw9W3mp+T4XTXf8nJRpkR2UVO/kLBX3XfIda006uGqaFY9boxiT3AocKMRsOBMJLbWNTvd1RR+1xPyMAEM+MMTUHpwfn0d+zBZseuMGnoGD+Y6PrUoZQVK5WaUvWoytQUUH060rThcIjCHq2e5jep5KzWjsqJNCqFu8EHITf7QiIUJUDY1O8BnJBsu8etcFTAySBiUPrX9XvUO6Ife+oxEFVJ1et7xDavMUTYwZfhlL9m5Y6kLSk2DL8ZdK6ywhzfrHspueTzELN6xuxVTt0PPbe0VNlfZfp3AEhgmT4HdLzW6g093sVDeMrmW3LaS32qnYUtR9PB7hXsbSlBO3CHoYqqYXRMtT3vts6tNoDzfWDd01UaDpQLfUucTjZ69ptTZO5IoFGB982otPsKzvhsUAgsOm314CZQdouq/72nXTLcABj7ELppk/4LAK9u2aGXauvp0GvU45WRaFZbphrD7KXIgPzZX/ghIdjt2RZB9wc2ir+UNSuTVYQdXI0rbaAK43d1Z8ZC1xMyHRhXM0TUy0R6tm2vz4i/wUqum6z+IdEJSPKALZVek=
-    - if: branch =~ /^stardust-core-.*$/
+    - stage: deploy stardust-core
+      if: branch =~ /^stardust-core-.*$/
       before_deploy: cd packages/stardust-core
       deploy:
         provider: npm
@@ -42,7 +43,8 @@ jobs:
       branches:
         only:
           - /^stardust-core-.*$/
-    - if: branch =~ /^stardust-webgl-.*$/
+    - stage: deploy stardust-webgl
+      if: branch =~ /^stardust-webgl-.*$/
       before_deploy: cd packages/stardust-webgl
       deploy:
         provider: npm
@@ -53,7 +55,8 @@ jobs:
       branches:
         only:
           - /^stardust-webgl-.*$/
-    - if: branch =~ /^stardust-isotype-.*$/
+    - stage: deploy stardust-isotype
+      if: branch =~ /^stardust-isotype-.*$/
       before_deploy: cd packages/stardust-isotype
       deploy:
         provider: npm
