@@ -52,7 +52,7 @@ async function renderExamples(destination: string) {
     );
     fs.writeFileSync(
       path.join(outdir, "index.html"),
-      new Buffer(index, "utf8")
+      Buffer.from(index, "utf8")
     );
   }
 }
