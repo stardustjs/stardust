@@ -7,14 +7,18 @@ install:
   - npm install -g yarn
   - gem install bundler
 
+before_script:
+  - yarn
+  - cd website
+  - bundle install
+  - cd ..
+
+script: skip
+
 jobs:
   # Build stage
   - stage: build
-    before_script:
-      - yarn
-      - cd website
-      - bundle install
-      - cd ..
+
     script:
       - yarn build
       - cd website
