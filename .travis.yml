@@ -30,8 +30,9 @@ jobs:
         repo: stardustjs/stardustjs.github.io
         github-token:
           secure: gE6TTLIq6Z3iQXYvu4WYO1w3TB7VLopnFcHZwCwBCYIk5Y98vuimd9G2ubBlBeGX74Aga+I1wNJQg0BBP1PKWrUbMGitZECPCJw6A40KQp7kZEe9btN4/gw9W3mp+T4XTXf8nJRpkR2UVO/kLBX3XfIda006uGqaFY9boxiT3AocKMRsOBMJLbWNTvd1RR+1xPyMAEM+MMTUHpwfn0d+zBZseuMGnoGD+Y6PrUoZQVK5WaUvWoytQUUH060rThcIjCHq2e5jep5KzWjsqJNCqFu8EHITf7QiIUJUDY1O8BnJBsu8etcFTAySBiUPrX9XvUO6Ife+oxEFVJ1et7xDavMUTYwZfhlL9m5Y6kLSk2DL8ZdK6ywhzfrHspueTzELN6xuxVTt0PPbe0VNlfZfp3AEhgmT4HdLzW6g093sVDeMrmW3LaS32qnYUtR9PB7hXsbSlBO3CHoYqqYXRMtT3vts6tNoDzfWDd01UaDpQLfUucTjZ69ptTZO5IoFGB982otPsKzvhsUAgsOm314CZQdouq/72nXTLcABj7ELppk/4LAK9u2aGXauvp0GvU45WRaFZbphrD7KXIgPzZX/ghIdjt2RZB9wc2ir+UNSuTVYQdXI0rbaAK43d1Z8ZC1xMyHRhXM0TUy0R6tm2vz4i/wUqum6z+IdEJSPKALZVek=
-        on:
-          branch: master
+      branches:
+        only:
+          - master
     - before_deploy: cd packages/stardust-core
       deploy:
         provider: npm
@@ -39,8 +40,9 @@ jobs:
         email: "donghao.ren+npm@gmail.com"
         api_key:
           secure: "VNkn7xYuSLkgJ0VmvzxFaI6Nx+uzheiMjW3V7nT/lMKOMNvLbCkWgAxZ+qZWgVKHhJZlEFGdhJUtbkr5ATQNZW5cZ+ehyx9eoJjEYicvt/r9nqRb7mGuAM+WHEe7oRIn7A+vgYnYr4hITz03+rSbkOQO4uGW5K1Yf3fhBrR5f1mVFiWL0/4Ad8C19C2Xa2q8U3qmppGGA1MIr+iMCOgryoGLriNFbSm7nqMU2HOdZRTRpcbAzSiQGOi5mTu9jieBBJxScDAuHkL2S4MZQZAEYL02C1YpmZ1ktsMZwWuU0/BXSXroSU9HTBuPvcrLpZB82dzcs2Hxd4JaDH6BnbZy0cjh0xAeDDWsdR3CuksOF8ag33mkRReJBNbxLhlouCLClFEf8EcHkbgDhasZYDUGOikzF49+xZIh0vo/wlzO1MH0oPXWiD5IetOSfFNiS7uAsQStkl3pANvAGGFtdEUFaGknqQKInlgqaTm559HYhQK9otisGh0Upn7o+DGtepnFpM5EmzstiuQG9J/WyaYZnr2Z4y9Zf8YW+7hNTeS9ELyY4EeTFhK/3rvc39/oGM7gMHffT12qFZORw+ynCoDJDvBckY5ysRRDd2pw/A3K54N2kHc4KN9sQKKqohrr/B23WGl4mT0RngxgopP1Ho2wg+gc1owU12ZB5PC/qB4KMzg="
-        on:
-          condition: "$TRAVIS_TAG =~ ^stardust-core-.*$"
+      branches:
+        only:
+          - /^stardust-core-.*$/
     - before_deploy: cd packages/stardust-webgl
       deploy:
         provider: npm
@@ -48,8 +50,9 @@ jobs:
         email: "donghao.ren+npm@gmail.com"
         api_key:
           secure: "VNkn7xYuSLkgJ0VmvzxFaI6Nx+uzheiMjW3V7nT/lMKOMNvLbCkWgAxZ+qZWgVKHhJZlEFGdhJUtbkr5ATQNZW5cZ+ehyx9eoJjEYicvt/r9nqRb7mGuAM+WHEe7oRIn7A+vgYnYr4hITz03+rSbkOQO4uGW5K1Yf3fhBrR5f1mVFiWL0/4Ad8C19C2Xa2q8U3qmppGGA1MIr+iMCOgryoGLriNFbSm7nqMU2HOdZRTRpcbAzSiQGOi5mTu9jieBBJxScDAuHkL2S4MZQZAEYL02C1YpmZ1ktsMZwWuU0/BXSXroSU9HTBuPvcrLpZB82dzcs2Hxd4JaDH6BnbZy0cjh0xAeDDWsdR3CuksOF8ag33mkRReJBNbxLhlouCLClFEf8EcHkbgDhasZYDUGOikzF49+xZIh0vo/wlzO1MH0oPXWiD5IetOSfFNiS7uAsQStkl3pANvAGGFtdEUFaGknqQKInlgqaTm559HYhQK9otisGh0Upn7o+DGtepnFpM5EmzstiuQG9J/WyaYZnr2Z4y9Zf8YW+7hNTeS9ELyY4EeTFhK/3rvc39/oGM7gMHffT12qFZORw+ynCoDJDvBckY5ysRRDd2pw/A3K54N2kHc4KN9sQKKqohrr/B23WGl4mT0RngxgopP1Ho2wg+gc1owU12ZB5PC/qB4KMzg="
-        on:
-          condition: "$TRAVIS_TAG =~ ^stardust-webgl-.*$"
+      branches:
+        only:
+          - /^stardust-webgl-.*$/
     - before_deploy: cd packages/stardust-isotype
       deploy:
         provider: npm
@@ -57,5 +60,6 @@ jobs:
         email: "donghao.ren+npm@gmail.com"
         api_key:
           secure: "VNkn7xYuSLkgJ0VmvzxFaI6Nx+uzheiMjW3V7nT/lMKOMNvLbCkWgAxZ+qZWgVKHhJZlEFGdhJUtbkr5ATQNZW5cZ+ehyx9eoJjEYicvt/r9nqRb7mGuAM+WHEe7oRIn7A+vgYnYr4hITz03+rSbkOQO4uGW5K1Yf3fhBrR5f1mVFiWL0/4Ad8C19C2Xa2q8U3qmppGGA1MIr+iMCOgryoGLriNFbSm7nqMU2HOdZRTRpcbAzSiQGOi5mTu9jieBBJxScDAuHkL2S4MZQZAEYL02C1YpmZ1ktsMZwWuU0/BXSXroSU9HTBuPvcrLpZB82dzcs2Hxd4JaDH6BnbZy0cjh0xAeDDWsdR3CuksOF8ag33mkRReJBNbxLhlouCLClFEf8EcHkbgDhasZYDUGOikzF49+xZIh0vo/wlzO1MH0oPXWiD5IetOSfFNiS7uAsQStkl3pANvAGGFtdEUFaGknqQKInlgqaTm559HYhQK9otisGh0Upn7o+DGtepnFpM5EmzstiuQG9J/WyaYZnr2Z4y9Zf8YW+7hNTeS9ELyY4EeTFhK/3rvc39/oGM7gMHffT12qFZORw+ynCoDJDvBckY5ysRRDd2pw/A3K54N2kHc4KN9sQKKqohrr/B23WGl4mT0RngxgopP1Ho2wg+gc1owU12ZB5PC/qB4KMzg="
-        on:
-          condition: "$TRAVIS_TAG =~ ^stardust-isotype-.*$"
+      branches:
+        only:
+          - /^stardust-isotype-.*$/

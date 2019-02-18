@@ -40,6 +40,8 @@ async function renderExamples(destination: string) {
           await manager.getExampleFilePath(example.name, f, example),
           "-resize",
           "480x480",
+          "-define",
+          "png:exclude-chunk=time,date",
           path.join(outdir, "preview_small.png")
         ]);
       }
