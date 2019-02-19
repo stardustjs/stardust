@@ -40,6 +40,8 @@ jobs:
         email: "donghao.ren+npm@gmail.com"
         api_key:
           secure: "VNkn7xYuSLkgJ0VmvzxFaI6Nx+uzheiMjW3V7nT/lMKOMNvLbCkWgAxZ+qZWgVKHhJZlEFGdhJUtbkr5ATQNZW5cZ+ehyx9eoJjEYicvt/r9nqRb7mGuAM+WHEe7oRIn7A+vgYnYr4hITz03+rSbkOQO4uGW5K1Yf3fhBrR5f1mVFiWL0/4Ad8C19C2Xa2q8U3qmppGGA1MIr+iMCOgryoGLriNFbSm7nqMU2HOdZRTRpcbAzSiQGOi5mTu9jieBBJxScDAuHkL2S4MZQZAEYL02C1YpmZ1ktsMZwWuU0/BXSXroSU9HTBuPvcrLpZB82dzcs2Hxd4JaDH6BnbZy0cjh0xAeDDWsdR3CuksOF8ag33mkRReJBNbxLhlouCLClFEf8EcHkbgDhasZYDUGOikzF49+xZIh0vo/wlzO1MH0oPXWiD5IetOSfFNiS7uAsQStkl3pANvAGGFtdEUFaGknqQKInlgqaTm559HYhQK9otisGh0Upn7o+DGtepnFpM5EmzstiuQG9J/WyaYZnr2Z4y9Zf8YW+7hNTeS9ELyY4EeTFhK/3rvc39/oGM7gMHffT12qFZORw+ynCoDJDvBckY5ysRRDd2pw/A3K54N2kHc4KN9sQKKqohrr/B23WGl4mT0RngxgopP1Ho2wg+gc1owU12ZB5PC/qB4KMzg="
+        on:
+          tags: true
     - stage: deploy stardust-webgl
       if: branch =~ /^stardust-webgl-.*$/
       before_deploy: cd packages/stardust-webgl
@@ -49,6 +51,8 @@ jobs:
         email: "donghao.ren+npm@gmail.com"
         api_key:
           secure: "VNkn7xYuSLkgJ0VmvzxFaI6Nx+uzheiMjW3V7nT/lMKOMNvLbCkWgAxZ+qZWgVKHhJZlEFGdhJUtbkr5ATQNZW5cZ+ehyx9eoJjEYicvt/r9nqRb7mGuAM+WHEe7oRIn7A+vgYnYr4hITz03+rSbkOQO4uGW5K1Yf3fhBrR5f1mVFiWL0/4Ad8C19C2Xa2q8U3qmppGGA1MIr+iMCOgryoGLriNFbSm7nqMU2HOdZRTRpcbAzSiQGOi5mTu9jieBBJxScDAuHkL2S4MZQZAEYL02C1YpmZ1ktsMZwWuU0/BXSXroSU9HTBuPvcrLpZB82dzcs2Hxd4JaDH6BnbZy0cjh0xAeDDWsdR3CuksOF8ag33mkRReJBNbxLhlouCLClFEf8EcHkbgDhasZYDUGOikzF49+xZIh0vo/wlzO1MH0oPXWiD5IetOSfFNiS7uAsQStkl3pANvAGGFtdEUFaGknqQKInlgqaTm559HYhQK9otisGh0Upn7o+DGtepnFpM5EmzstiuQG9J/WyaYZnr2Z4y9Zf8YW+7hNTeS9ELyY4EeTFhK/3rvc39/oGM7gMHffT12qFZORw+ynCoDJDvBckY5ysRRDd2pw/A3K54N2kHc4KN9sQKKqohrr/B23WGl4mT0RngxgopP1Ho2wg+gc1owU12ZB5PC/qB4KMzg="
+        on:
+          tags: true
     - stage: deploy stardust-isotype
       if: branch =~ /^stardust-isotype-.*$/
       before_deploy: cd packages/stardust-isotype
@@ -58,3 +62,5 @@ jobs:
         email: "donghao.ren+npm@gmail.com"
         api_key:
           secure: "VNkn7xYuSLkgJ0VmvzxFaI6Nx+uzheiMjW3V7nT/lMKOMNvLbCkWgAxZ+qZWgVKHhJZlEFGdhJUtbkr5ATQNZW5cZ+ehyx9eoJjEYicvt/r9nqRb7mGuAM+WHEe7oRIn7A+vgYnYr4hITz03+rSbkOQO4uGW5K1Yf3fhBrR5f1mVFiWL0/4Ad8C19C2Xa2q8U3qmppGGA1MIr+iMCOgryoGLriNFbSm7nqMU2HOdZRTRpcbAzSiQGOi5mTu9jieBBJxScDAuHkL2S4MZQZAEYL02C1YpmZ1ktsMZwWuU0/BXSXroSU9HTBuPvcrLpZB82dzcs2Hxd4JaDH6BnbZy0cjh0xAeDDWsdR3CuksOF8ag33mkRReJBNbxLhlouCLClFEf8EcHkbgDhasZYDUGOikzF49+xZIh0vo/wlzO1MH0oPXWiD5IetOSfFNiS7uAsQStkl3pANvAGGFtdEUFaGknqQKInlgqaTm559HYhQK9otisGh0Upn7o+DGtepnFpM5EmzstiuQG9J/WyaYZnr2Z4y9Zf8YW+7hNTeS9ELyY4EeTFhK/3rvc39/oGM7gMHffT12qFZORw+ynCoDJDvBckY5ysRRDd2pw/A3K54N2kHc4KN9sQKKqohrr/B23WGl4mT0RngxgopP1Ho2wg+gc1owU12ZB5PC/qB4KMzg="
+        on:
+          tags: true
