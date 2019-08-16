@@ -101,7 +101,7 @@ export class TextCache {
     }
     // If can't fit in current line, start a new line.
     if (this.current_x + bbox_width > this.width) {
-      if (this.current_y + this.current_height + bbox_height > this.height) {
+      if (this.current_y + bbox_height > this.height) {
         throw new Error("E_FIT");
       }
       this.current_x = 0;
