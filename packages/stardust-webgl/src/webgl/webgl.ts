@@ -121,7 +121,7 @@ class WebGLPlatformMarkProgram {
       this.setUniform(name, types.int, unit);
     }
     const cache = this._textures.get(name);
-    const newData = texture.getTextureData();
+    const newData = texture.getTextureData(GL);
     if (cache.data == newData) {
       return;
     } else {

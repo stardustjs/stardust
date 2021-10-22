@@ -19,7 +19,7 @@ export interface TextureData {
 
 /** Texture data binding */
 export abstract class TextureBinding {
-  public abstract getTextureData(): TextureData;
+  public abstract getTextureData(GL: WebGLRenderingContext): TextureData;
 }
 
 export type ArrayBindingFunction = (
@@ -34,35 +34,54 @@ export class ArrayBinding extends TextureBinding {
   private _dirty = false;
   private _textureData: TextureData = null;
 
-  public getTextureData(): TextureData {
+  public getTextureData(GL: WebGLRenderingContext): TextureData {
     if (this._dirty) {
+      const MAX_TEXTURE_SIZE = GL.getParameter(GL.MAX_TEXTURE_SIZE);
       const values = this._data.map(this._valueFunction).map(getBindingValue);
+      let width = values.length;
+      let height = 1;
+      let length = width * height;
       if (values.length == 0) {
         this._textureData = null;
       } else {
+        if (width > MAX_TEXTURE_SIZE) {
+          height = Math.ceil(width / MAX_TEXTURE_SIZE);
+          width = MAX_TEXTURE_SIZE;
+          length = height * width;
+        }
         let array: Float32Array;
         let numberComponents: number;
         if (typeof values[0] == "number") {
           numberComponents = 1;
-          array = new Float32Array(values.length * 4);
-          for (let i = 0; i < values.length; i++) {
-            array[i * 4] = values[i] as number;
+          array = new Float32Array(length * 4);
+          for (let i = 0; i < length; i++) {
+            if (i < values.length) {
+              array[i * 4] = values[i] as number;
+            } else {
+              array[i * 4] = 0;
+            }
           }
         } else {
           numberComponents = (values[0] as number[]).length;
-          array = new Float32Array(values.length * 4);
+          array = new Float32Array(length * 4);
           let offset = 0;
-          for (let i = 0; i < values.length; i++) {
-            const v = values[i] as number[];
-            for (let j = 0; j < numberComponents; j++) {
-              array[offset++] = v[j];
-            }
-            offset += 4 - numberComponents;
+          for (let i = 0; i < length; i++) {
+            if (i < values.length) {
+              const v = values[i] as number[];
+              for (let j = 0; j < numberComponents; j++) {
+                array[offset++] = v[j];
+              }
+              offset += 4 - numberComponents;
+            } else {
+              for (let j = 0; j < 4; j++) {
+                  array[offset++] = 0;
+              }
+          }
           }
         }
         this._textureData = {
-          width: this._data.length,
-          height: 1,
+          width,
+          height,
           dimensions: 1,
           type: "f32",
           numberComponents,
@@ -117,7 +136,7 @@ export class Image extends TextureBinding {
     };
   }
 
-  public getTextureData() {
+  public getTextureData(GL: WebGLRenderingContext) {
     return this._data;
   }
 }
